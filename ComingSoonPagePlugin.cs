@@ -1,17 +1,11 @@
 ﻿using Nop.Core;
-using Nop.Core.Data;
 using Nop.Core.Plugins;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Media;
-using Nop.Web.Framework.Menu;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Routing;
 
 namespace Nop.Plugin.Misc.ComingSoonPage

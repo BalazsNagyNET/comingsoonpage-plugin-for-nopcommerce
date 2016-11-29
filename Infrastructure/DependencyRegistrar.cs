@@ -1,13 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
-using Nop.Core.Data;
 using Nop.Core.Infrastructure;
 using Nop.Core.Infrastructure.DependencyManagement;
-using Nop.Data;
-using Nop.Web.Framework.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Nop.Core.Configuration;
 using Nop.Plugin.Misc.ComingSoonPage.Controllers;
 using Nop.Core.Caching;
