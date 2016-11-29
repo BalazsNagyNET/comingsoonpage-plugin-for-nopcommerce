@@ -8,7 +8,6 @@ using Nop.Services.Localization;
 using Nop.Services.Media;
 using Nop.Services.Stores;
 using Nop.Web.Framework.Controllers;
-using Nop.Core.Domain.Customers;
 using Nop.Services.Messages;
 using Nop.Core.Domain.Messages;
 using System;

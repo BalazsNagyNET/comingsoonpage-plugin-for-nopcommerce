@@ -1,4 +1,4 @@
-﻿Group: Widgets
+﻿Group: User Interface
 FriendlyName: Coming Soon Page
 SystemName: Misc.ComingSoonPage
 Version: 1.00
@@ -6,4 +6,4 @@ SupportedVersions: 3.80
 Author: Balázs Nagy
 DisplayOrder: 1
 FileName: Nop.Plugin.Misc.ComingSoonPage.dll
-Description: This plugin allows you to display a coming soon page with subscription field when shop is not yet open
+Description: Plugin to Override Store Closed Page with a Coming Soon (Maintenance) Page.
