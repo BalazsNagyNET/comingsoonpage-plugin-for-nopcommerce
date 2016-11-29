@@ -1,5 +1,5 @@
 # Coming Soon Page Plugin for nopCommerce
-Plugin to Override Store Closed Page with a Coming Soon Page.
+Plugin to Override Store Closed Page with a Coming Soon (Maintenance) Page.
 
 Setup:
 
