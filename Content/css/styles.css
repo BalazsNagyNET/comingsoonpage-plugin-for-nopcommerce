@@ -1,0 +1,66 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Raleway');
+html,
+body {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  box-shadow: inset 2000px 0 0 0 rgba(0, 0, 0, 0.5);
+}
+.csp-wrapper {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  padding: 5% 0 0 0;
+}
+.csp-wrapper .csp-section {
+  padding: 1em 0 0 0;
+}
+.csp-wrapper .csp-title,
+.csp-wrapper .csp-subtitle,
+.csp-wrapper .csp-countdown {
+  font-size: 4em;
+}
+.csp-wrapper .csp-subtitle {
+  font-size: 2.5em;
+}
+.csp-wrapper .csp-newsletter {
+  display: inline-block;
+  font-size: 1.3em;
+}
+@media screen and (max-width: 400px) {
+  .csp-wrapper {
+    font-size: 0.6rem;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 720px) {
+  .csp-wrapper {
+    font-size: 0.7rem;
+  }
+}
+@media screen and (min-width: 721px) and (max-width: 1280px) {
+  .csp-wrapper {
+    font-size: 0.9rem;
+  }
+}
+@media screen and (min-width: 1281px) and (max-width: 1440px) {
+  .csp-wrapper {
+    font-size: 1.1rem;
+  }
+}
+@media screen and (min-width: 1441px) and (max-width: 1920px) {
+  .csp-wrapper {
+    font-size: 1.2rem;
+  }
+}
+@media screen and (min-width: 1921px) {
+  .csp-wrapper {
+    font-size: 1.6rem;
+  }
+}

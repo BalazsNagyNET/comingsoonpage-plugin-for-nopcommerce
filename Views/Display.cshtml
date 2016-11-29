@@ -1,0 +1,102 @@
+﻿@model Nop.Plugin.Misc.ComingSoonPage.Models.PublicInfoModel
+@using Nop.Web.Framework.UI;
+@{
+    Layout = "~/Views/Shared/_Root.Head.cshtml";
+
+    //title
+    Html.AddTitleParts(T("Plugins.Misc.ComingSoonPage.PageTitle").Text);
+
+    Html.AddCssFileParts("~/Plugins/Misc.ComingSoonPage/Content/css/styles.css");
+    Html.AddScriptParts("~/Plugins/Misc.ComingSoonPage/Scripts/jquery.countdown.min.js");
+}
+<style>
+    body {
+        background-image: url(@Model.BackgroundUrl)
+    }
+</style>
+<div class="csp-wrapper">
+    <div class="csp-container">
+        <div class="csp-content">
+
+            <div class="csp-title csp-section">
+                @T("Plugins.Misc.ComingSoonPage.ComingSoon")
+            </div>
+            <div class="csp-subtitle csp-section">
+                @T("Plugins.Misc.ComingSoonPage.ComingSoon.Hint")
+            </div>
+            @if (Model.DisplayCountdown && Model.OpeningDate != null)
+            {
+                <div id="countdown" class="csp-countdown csp-section">
+                    <div class="weeks"></div>
+                    <div class="days"></div>
+                    <div class="time"></div>
+                </div>
+                <script type="text/javascript">
+                    $("#countdown")
+                    .countdown("@Model.OpeningDate", function (event) {
+                        $('.weeks').html(event.strftime('%-W week%!W'));
+                        $('.days').html(event.strftime('%-d day%!d'));
+                        $('.time').html(event.strftime('%H:%M:%S'));
+                    });
+                </script>
+            }
+            @if (Model.DisplayNewsletterBox)
+            {
+                <div class="csp-newsletter csp-section">
+                    <div class="newsletter-subscribe" id="newsletter-subscribe-block">
+                        <div class="newsletter-email">
+                            <input class="newsletter-subscribe-text" id="newsletter-email" name="NewsletterEmail" placeholder="Enter your email here..." type="text" value="">
+                            <input type="button" value="Subscribe" id="newsletter-subscribe-button" class="button-1 newsletter-subscribe-button">
+                        </div>
+                        <div class="newsletter-validation">
+                            <span id="subscribe-loading-progress" style="display: none;" class="please-wait">Wait...</span>
+                            <span class="field-validation-valid" data-valmsg-for="NewsletterEmail" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="newsletter-result" id="newsletter-result-block"></div>
+                    <script type="text/javascript">
+                        function newsletter_subscribe() {
+                            var subscribeProgress = $("#subscribe-loading-progress");
+                            subscribeProgress.show();
+                            var postData = {
+                                email: $("#newsletter-email").val()
+                            };
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@(@Url.Action("Subscribe", "ComingSoonPage"))",
+                                data: postData,
+                                success: function (data) {
+                                    subscribeProgress.hide();
+                                    $("#newsletter-result-block").html(data.Result);
+                                    if (data.Success) {
+                                        $('#newsletter-subscribe-block').hide();
+                                        $('#newsletter-result-block').show();
+                                    } else {
+                                        $('#newsletter-result-block').fadeIn("slow").delay(2000).fadeOut("slow");
+                                    }
+                                },
+                                error: function (xhr, ajaxOptions, thrownError) {
+                                    alert('Failed to subscribe.');
+                                    subscribeProgress.hide();
+                                }
+                            });
+                        }
+
+                        $(document).ready(function () {
+                            $('#newsletter-subscribe-button').click(function () {
+                                newsletter_subscribe();
+                            });
+                            $("#newsletter-email").keydown(function (event) {
+                                if (event.keyCode == 13) {
+                                    $("#newsletter-subscribe-button").click();
+                                    return false;
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+            }
+        </div>
+    </div>
+</div>
