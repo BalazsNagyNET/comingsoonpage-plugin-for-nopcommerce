@@ -9,5 +9,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage
         public DateTime OpeningDate { get; set; }
         public bool DisplayCountdown { get; set; }
         public bool DisplayNewsletterBox { get; set; }
+        public bool DisplayLoginButton { get; set; }
     }
 }

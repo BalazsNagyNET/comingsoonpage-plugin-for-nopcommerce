@@ -21,8 +21,45 @@ html, body {
     //text-shadow: -2px 2px black;
     padding: 5% 0 0 0;
 
+    .csp-heading {
+        .csp-button {
+            cursor: pointer;
+            border: 2px solid;
+            padding: 5px;
+        }
+
+        .csp-login-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .csp-submit-button {
+            font-size: 12px;
+            color: white;
+            background: none;
+        }
+
+        .csp-login-form {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            border: white solid 2px;
+
+            .csp-form-fields {
+                .csp-login-input {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+
+
     .csp-section {
-        padding: 1em 0 0 0;
+        padding: 1.5em 0 0 0;
     }
 
     .csp-title, .csp-subtitle, .csp-countdown {
@@ -41,36 +78,48 @@ html, body {
 
 @media screen and (max-width: 400px) {
     .csp-wrapper {
-        font-size: 0.6rem;
+        .csp-content {
+            font-size: 0.6rem;
+        }
     }
 }
 
 @media screen and (min-width: 401px) and (max-width: 720px) {
     .csp-wrapper {
-        font-size: 0.7rem;
+        .csp-content {
+            font-size: 0.7rem;
+        }
     }
 }
 
 @media screen and (min-width: 721px) and (max-width: 1280px) {
     .csp-wrapper {
-        font-size: 0.9rem;
+        .csp-content {
+            font-size: 0.9rem;
+        }
     }
 }
 
 @media screen and (min-width: 1281px) and (max-width: 1440px) {
     .csp-wrapper {
-        font-size: 1.1rem;
+        .csp-content {
+            font-size: 1.1rem;
+        }
     }
 }
 
 @media screen and (min-width: 1441px) and (max-width: 1920px) {
     .csp-wrapper {
-        font-size: 1.2rem;
+        .csp-content {
+            font-size: 1.2rem;
+        }
     }
 }
 
 @media screen and (min-width: 1921px) {
     .csp-wrapper {
-        font-size: 1.6rem;
+        .csp-content {
+            font-size: 1.6rem;
+        }
     }
 }
