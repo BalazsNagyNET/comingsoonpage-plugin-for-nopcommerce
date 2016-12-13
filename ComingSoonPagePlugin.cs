@@ -49,7 +49,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             var settings = new ComingSoonPageSettings
             {
                 BackgroundId = _pictureService.InsertPicture(File.ReadAllBytes(sampleBackgroundPath), MimeTypes.ImagePJpeg, "background").Id,
-                OpeningDate = new DateTime(2016, 12, 12),
+                OpeningDate = DateTime.Now.AddDays(7),
                 DisplayCountdown = true,
                 DisplayNewsletterBox = true,
                 DisplayLoginButton = true
