@@ -14,6 +14,12 @@ using System;
 using Nop.Web.Framework;
 using Nop.Core.Domain.Customers;
 using Nop.Web.Framework.Security.Captcha;
+using Nop.Web.Models.Customer;
+using Nop.Services.Customers;
+using Nop.Services.Orders;
+using Nop.Services.Authentication;
+using Nop.Services.Events;
+using Nop.Services.Logging;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -26,10 +32,20 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         private readonly ISettingService _settingService;
         private readonly ICacheManager _cacheManager;
         private readonly ILocalizationService _localizationService;
+
+        //needed for subscription action (will be not necessary from nopCommerce 3.90)
         private readonly INewsLetterSubscriptionService _newsLetterSubscriptionService;
         private readonly IWorkflowMessageService _workflowMessageService;
+        
+        //needed for login action
         private readonly CustomerSettings _customerSettings;
         private readonly CaptchaSettings _captchaSettings;
+        private ICustomerRegistrationService _customerRegistrationService;
+        private ICustomerService _customerService;
+        private IShoppingCartService _shoppingCartService;
+        private IAuthenticationService _authenticationService;
+        private IEventPublisher _eventPublisher;
+        private ICustomerActivityService _customerActivityService;
 
         public ComingSoonPageController(IWorkContext workContext,
             IStoreContext storeContext,
@@ -40,8 +56,15 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             ILocalizationService localizationService,
             INewsLetterSubscriptionService newsLetterSubscriptionService,
             IWorkflowMessageService workflowMessageService,
+
             CustomerSettings customerSettings,
-            CaptchaSettings captchaSettings)
+            CaptchaSettings captchaSettings,
+            ICustomerRegistrationService customerRegistrationService,
+            ICustomerService customerService,
+            IShoppingCartService shoppingCartService,
+            IAuthenticationService authenticationService,
+            IEventPublisher eventPublisher,
+            ICustomerActivityService customerActivityService)
         {
             this._workContext = workContext;
             this._storeContext = storeContext;
@@ -52,8 +75,16 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             this._localizationService = localizationService;
             this._newsLetterSubscriptionService = newsLetterSubscriptionService;
             this._workflowMessageService = workflowMessageService;
+
             this._customerSettings = customerSettings;
             this._captchaSettings = captchaSettings;
+
+            this._customerRegistrationService = customerRegistrationService;
+            this._customerService = customerService;
+            this._shoppingCartService = shoppingCartService;
+            this._authenticationService = authenticationService;
+            this._eventPublisher = eventPublisher;
+            this._customerActivityService = customerActivityService;
         }
 
         protected string GetBackgroundUrl(int backgroundId)
@@ -128,6 +159,9 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 
         public ActionResult Display()
         {
+            if (TempData.ContainsKey("ModelState"))
+                ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
+
             var comingSoonPageSettings = _settingService.LoadSetting<ComingSoonPageSettings>(_storeContext.CurrentStore.Id);
 
             var model = new PublicInfoModel();
@@ -188,6 +222,75 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
                 Success = success,
                 Result = result,
             });
+        }
+
+        [HttpPost]
+        [CaptchaValidator]
+        //available even when a store is closed
+        [StoreClosed(true)]
+        //available even when navigation is not allowed
+        [PublicStoreAllowNavigation(true)]
+        public ActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
+        {
+            //validate CAPTCHA
+            if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
+            {
+                ModelState.AddModelError("", _captchaSettings.GetWrongCaptchaMessage(_localizationService));
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (_customerSettings.UsernamesEnabled && model.Username != null)
+                {
+                    model.Username = model.Username.Trim();
+                }
+                var loginResult = _customerRegistrationService.ValidateCustomer(_customerSettings.UsernamesEnabled ? model.Username : model.Email, model.Password);
+                switch (loginResult)
+                {
+                    case CustomerLoginResults.Successful:
+                        {
+                            var customer = _customerSettings.UsernamesEnabled ? _customerService.GetCustomerByUsername(model.Username) : _customerService.GetCustomerByEmail(model.Email);
+
+                            //migrate shopping cart
+                            _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, customer, true);
+
+                            //sign in new customer
+                            _authenticationService.SignIn(customer, model.RememberMe);
+
+                            //raise event       
+                            _eventPublisher.Publish(new CustomerLoggedinEvent(customer));
+
+                            //activity log
+                            _customerActivityService.InsertActivity("PublicStore.Login", _localizationService.GetResource("ActivityLog.PublicStore.Login"), customer);
+
+                            if (String.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+                                return RedirectToRoute("HomePage");
+
+                            return Redirect(returnUrl);
+                        }
+                    case CustomerLoginResults.CustomerNotExist:
+                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.CustomerNotExist"));
+                        break;
+                    case CustomerLoginResults.Deleted:
+                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.Deleted"));
+                        break;
+                    case CustomerLoginResults.NotActive:
+                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.NotActive"));
+                        break;
+                    case CustomerLoginResults.NotRegistered:
+                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.NotRegistered"));
+                        break;
+                    case CustomerLoginResults.WrongPassword:
+                    default:
+                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials"));
+                        break;
+                }
+            }
+
+            //If we got this far, something failed, redisplay form
+            TempData["ModelState"] = ModelState;
+            return RedirectToAction("Display");
+            //return View("~/Plugins/Misc.ComingSoonPage/Views/Display.cshtml", model);
         }
     }
 }
