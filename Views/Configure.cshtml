@@ -24,6 +24,16 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.OpeningDate_OverrideForStore, model => model.OpeningDate, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.OpeningDate)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.OpeningDate)
+                        @Html.ValidationMessageFor(model => model.OpeningDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
                         @Html.OverrideStoreCheckboxFor(model => model.DisplayCountdown_OverrideForStore, model => model.DisplayCountdown, Model.ActiveStoreScopeConfiguration)
                         @Html.NopLabelFor(model => model.DisplayCountdown)
                     </div>
@@ -44,12 +54,12 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.OverrideStoreCheckboxFor(model => model.OpeningDate_OverrideForStore, model => model.OpeningDate, Model.ActiveStoreScopeConfiguration)
-                        @Html.NopLabelFor(model => model.OpeningDate)
+                        @Html.OverrideStoreCheckboxFor(model => model.DisplayLoginButton_OverrideForStore, model => model.DisplayLoginButton, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.DisplayLoginButton)
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.OpeningDate)
-                        @Html.ValidationMessageFor(model => model.OpeningDate)
+                        @Html.NopEditorFor(model => model.DisplayLoginButton)
+                        @Html.ValidationMessageFor(model => model.DisplayLoginButton)
                     </div>
                 </div>
                 <div class="form-group">

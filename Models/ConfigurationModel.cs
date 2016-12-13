@@ -30,5 +30,10 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Models
         [AllowHtml]
         public bool DisplayNewsletterBox { get; set; }
         public bool DisplayNewsletterBox_OverrideForStore { get; set; }
+
+        [NopResourceDisplayName("Plugins.Misc.ComingSoonPage.DisplayLoginButton")]
+        [AllowHtml]
+        public bool DisplayLoginButton { get; set; }
+        public bool DisplayLoginButton_OverrideForStore { get; set; }
     }
 }

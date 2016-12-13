@@ -49,9 +49,10 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             var settings = new ComingSoonPageSettings
             {
                 BackgroundId = _pictureService.InsertPicture(File.ReadAllBytes(sampleBackgroundPath), MimeTypes.ImagePJpeg, "background").Id,
+                OpeningDate = new DateTime(2016, 12, 12),
                 DisplayCountdown = true,
                 DisplayNewsletterBox = true,
-                OpeningDate = new DateTime(2016, 12, 12)
+                DisplayLoginButton = true
             };
             _settingService.SaveSetting(settings);
 
@@ -68,6 +69,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown.Hint", "Check to display countdown based on the opening date.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox", "Allow subscription");
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox.Hint", "Check to display input for visitors to subscribe.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton", "Display login button");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton.Hint", "Check to display login button, so administrators can still log in.");
 
 
             base.Install();
@@ -90,6 +93,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown.Hint");
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox");
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox.Hint");
+            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton");
+            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton.Hint");
             base.Uninstall();
         }
 

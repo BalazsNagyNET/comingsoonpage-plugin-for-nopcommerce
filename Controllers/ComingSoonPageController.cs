@@ -12,6 +12,8 @@ using Nop.Services.Messages;
 using Nop.Core.Domain.Messages;
 using System;
 using Nop.Web.Framework;
+using Nop.Core.Domain.Customers;
+using Nop.Web.Framework.Security.Captcha;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -26,6 +28,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly INewsLetterSubscriptionService _newsLetterSubscriptionService;
         private readonly IWorkflowMessageService _workflowMessageService;
+        private readonly CustomerSettings _customerSettings;
+        private readonly CaptchaSettings _captchaSettings;
 
         public ComingSoonPageController(IWorkContext workContext,
             IStoreContext storeContext,
@@ -35,7 +39,9 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             ICacheManager cacheManager,
             ILocalizationService localizationService,
             INewsLetterSubscriptionService newsLetterSubscriptionService,
-            IWorkflowMessageService workflowMessageService)
+            IWorkflowMessageService workflowMessageService,
+            CustomerSettings customerSettings,
+            CaptchaSettings captchaSettings)
         {
             this._workContext = workContext;
             this._storeContext = storeContext;
@@ -46,6 +52,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             this._localizationService = localizationService;
             this._newsLetterSubscriptionService = newsLetterSubscriptionService;
             this._workflowMessageService = workflowMessageService;
+            this._customerSettings = customerSettings;
+            this._captchaSettings = captchaSettings;
         }
 
         protected string GetBackgroundUrl(int backgroundId)
@@ -71,16 +79,18 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             var comingSoonPageSettings = _settingService.LoadSetting<ComingSoonPageSettings>(storeScope);
             var model = new ConfigurationModel();
             model.BackgroundId = comingSoonPageSettings.BackgroundId;
+            model.OpeningDate = comingSoonPageSettings.OpeningDate;
             model.DisplayCountdown = comingSoonPageSettings.DisplayCountdown;
             model.DisplayNewsletterBox = comingSoonPageSettings.DisplayNewsletterBox;
-            model.OpeningDate = comingSoonPageSettings.OpeningDate;
+            model.DisplayLoginButton = comingSoonPageSettings.DisplayLoginButton;
             model.ActiveStoreScopeConfiguration = storeScope;
             if (storeScope > 0)
             {
                 model.BackgroundId_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.BackgroundId, storeScope);
+                model.OpeningDate_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.OpeningDate, storeScope);
                 model.DisplayCountdown_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.DisplayCountdown, storeScope);
                 model.DisplayNewsletterBox_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.DisplayNewsletterBox, storeScope);
-                model.OpeningDate_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.OpeningDate, storeScope);
+                model.DisplayLoginButton_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.DisplayLoginButton, storeScope);
             }
 
             return View("~/Plugins/Misc.ComingSoonPage/Views/Configure.cshtml", model);
@@ -95,17 +105,19 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
             var comingSoonPageSettings = _settingService.LoadSetting<ComingSoonPageSettings>(storeScope);
             comingSoonPageSettings.BackgroundId = model.BackgroundId;
+            comingSoonPageSettings.OpeningDate = model.OpeningDate;
             comingSoonPageSettings.DisplayCountdown = model.DisplayCountdown;
             comingSoonPageSettings.DisplayNewsletterBox = model.DisplayNewsletterBox;
-            comingSoonPageSettings.OpeningDate = model.OpeningDate;
+            comingSoonPageSettings.DisplayLoginButton = model.DisplayLoginButton;
 
             /* We do not clear cache after each setting update.
              * This behavior can increase performance because cached settings will not be cleared 
              * and loaded from database after each update */
             _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.BackgroundId, model.BackgroundId_OverrideForStore, storeScope, false);
+            _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.OpeningDate, model.OpeningDate_OverrideForStore, storeScope, false);
             _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.DisplayCountdown, model.DisplayCountdown_OverrideForStore, storeScope, false);
             _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.DisplayNewsletterBox, model.DisplayNewsletterBox_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.OpeningDate, model.OpeningDate_OverrideForStore, storeScope, false);
+            _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.DisplayLoginButton, model.DisplayLoginButton_OverrideForStore, storeScope, false);
 
             //now clear settings cache
             _settingService.ClearCache();
@@ -120,9 +132,12 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 
             var model = new PublicInfoModel();
             model.BackgroundUrl = GetBackgroundUrl(comingSoonPageSettings.BackgroundId);
+            model.OpeningDate = comingSoonPageSettings.OpeningDate;
             model.DisplayCountdown = comingSoonPageSettings.DisplayCountdown;
             model.DisplayNewsletterBox = comingSoonPageSettings.DisplayNewsletterBox;
-            model.OpeningDate = comingSoonPageSettings.OpeningDate;
+            model.DisplayLoginButton = comingSoonPageSettings.DisplayLoginButton;
+            model.UsernamesEnabled = _customerSettings.UsernamesEnabled;
+            model.DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage;
 
             return View("~/Plugins/Misc.ComingSoonPage/Views/Display.cshtml", model);
         }
