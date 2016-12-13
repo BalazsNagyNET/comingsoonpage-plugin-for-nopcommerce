@@ -11,7 +11,7 @@
     Html.AddScriptParts("~/Plugins/Misc.ComingSoonPage/Scripts/jquery.countdown.min.js");
 }
 <style>
-    body {
+    body, .csp-login-form {
         background-image: url(@Model.BackgroundUrl)
     }
 </style>
@@ -20,51 +20,49 @@
         <div class="csp-heading">
             @if (Model.DisplayLoginButton)
             {
-                @*<a href="@Url.RouteUrl("Login")" class="csp-login-button">@T("Account.Login")</a>*@
                 <div class="csp-button csp-login-button" onclick="$('#csp-login-form').slideToggle();">@T("Account.Login")</div>
-                <div class="csp-login-form" id="csp-login-form">
-                    @using (Html.BeginForm("Login", "Customer"))
-                        {
-                            var validationSummary = Html.ValidationSummary(true, T("Account.Login.Unsuccessful").Text);
-                            if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
-                            {
-                                    <div class="csp-message-error">@validationSummary</div>
-                            }
-                            <div class="csp-form-fields">
-                                <div class="csp-login-input csp-login-name">
-                                    @if (Model.UsernamesEnabled)
-                                    {
-                                        <input autofocus="autofocus" class="username valid" id="Username" name="Username" placeholder="Username" type="text" value="">
-                                        <span class="field-validation-valid" data-valmsg-for="Username" data-valmsg-replace="true"></span>
-                                    }
-                                    else
-                                    {
-                                        <input autofocus="autofocus" class="email valid" data-val="true" data-val-email="Wrong email" data-val-required="Please enter your email" id="Email" name="Email" placeholder="Email" type="text" value="">
-                                        <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
-                                    }
-                                </div>
-                                <div class="csp-login-input csp-login-password">
-                                    <input class="csp-password" id="Password" name="Password" placeholder="Password" type="password">
-                                    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
-                                </div>
-                                <div class="csp-login-input csp-login-remember-me reversed">
-                                    <input data-val="true" data-val-required="'Remember Me' must not be empty." id="RememberMe" name="RememberMe" type="checkbox" value="true"><input name="RememberMe" type="hidden" value="false">
-                                    <label for="RememberMe">Remember me?</label>
-                                    <span class="forgot-password">
-                                        <a href="/passwordrecovery">Forgot password?</a>
-                                    </span>
-                                </div>
-                                @if (Model.DisplayCaptcha)
+                var validationSummary = Html.ValidationSummary(true, T("Account.Login.Unsuccessful").Text);
+                var displayErrorMessage = !MvcHtmlString.IsNullOrEmpty(validationSummary) ? "csp-show" : "csp-hide";
+                <div class="csp-login-form @displayErrorMessage" id="csp-login-form">
+                    @using (Html.BeginForm("Login", "ComingSoonPage"))
+                    {
+
+                        <div class="csp-form-fields">
+                            <div class="csp-login-input csp-login-name">
+                                @if (Model.UsernamesEnabled)
                                 {
-                                    <div class="captcha-box">
+                                    <input autofocus="autofocus" class="username valid" id="Username" name="Username" placeholder="Username" type="text" value="">
+                                    <span class="field-validation-valid" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+                                }
+                                else
+                                {
+                                    <input autofocus="autofocus" class="email valid" data-val="true" data-val-email="Wrong email" data-val-required="Please enter your email" id="Email" name="Email" placeholder="Email" type="text" value="">
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                }
+                            </div>
+                            <div class="csp-login-input csp-login-password">
+                                <input class="csp-password" id="Password" name="Password" placeholder="Password" type="password">
+                                <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="csp-login-input">
+                                <input class="csp-button csp-submit-button" type="submit" value="@T("Account.Login")" />
+                            </div>
+                            <div class="csp-login-input csp-login-remember-me reversed">
+                                <input data-val="true" data-val-required="'Remember Me' must not be empty." id="RememberMe" name="RememberMe" type="checkbox" value="true"><input name="RememberMe" type="hidden" value="false">
+                                <label for="RememberMe">Remember me?</label>
+                            </div>
+                            @if (Model.DisplayCaptcha)
+                            {
+                                <div class="csp-login-input csp-login-captcha">
+                                    <div class="csp-captcha-box">
                                         @Html.Raw(Html.GenerateCaptcha())
                                     </div>
-                                }
-                                <div class="csp-login-input">
-                                    <input class="csp-button csp-submit-button" type="submit" value="@T("Forum.Submit")" />
                                 </div>
-                            </div>
-                        }
+                            }
+                            <div style="clear: both;"></div>
+                        </div>
+                                    <div class="csp-message-error @displayErrorMessage">@validationSummary</div>
+                    }
                 </div>
             }
         </div>
