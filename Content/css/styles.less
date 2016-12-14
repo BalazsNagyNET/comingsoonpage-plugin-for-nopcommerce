@@ -20,33 +20,32 @@ html, body {
     color: white;
     padding: 5% 0 0 0;
     //login button and form
+    .csp-button {
+        cursor: pointer;
+        border: 2px solid;
+        padding: 5px;
+        background: none;
+        text-transform: uppercase;
+        font: 12px 'Raleway', sans-serif;
+        color: white;
+    }
+
     .csp-heading {
         .csp-show {
             display: block;
         }
 
         .csp-hide {
-            display: block;
+            display: none;
         }
 
-        .csp-button {
-            cursor: pointer;
-            border: 2px solid;
-            padding: 5px;
-            font-family: 'Raleway', sans-serif;
-        }
+
 
         .csp-login-button {
             position: absolute;
             top: 15px;
             right: 15px;
             z-index: 1;
-        }
-
-        .csp-submit-button {
-            font-size: 12px;
-            color: white;
-            background: none;
         }
 
         .csp-login-form {
@@ -70,14 +69,19 @@ html, body {
                 .csp-login-input {
                     margin-top: 15px;
                     text-align: center;
-                    font-family: 'Raleway', sans-serif;
                 }
 
                 .csp-captcha-box {
-                    transform: scale(0.77);
-                    -webkit-transform: scale(0.77);
-                    transform-origin: 0 0;
-                    -webkit-transform-origin: 0 0;
+                    margin: -15px;
+
+                    > div {
+                        display: inline-block;
+                        max-width: 100%;
+                        transform: scale(0.62, 0.62);
+                        -webkit-transform: scale(0.62, 0.62);
+                        transform-origin: center center;
+                        -webkit-transform-origin: center center;
+                    }
                 }
             }
         }
