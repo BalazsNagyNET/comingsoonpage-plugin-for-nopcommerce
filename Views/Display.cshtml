@@ -45,7 +45,7 @@
                                 <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
                             </div>
                             <div class="csp-login-input">
-                                <input class="csp-button csp-submit-button" type="submit" value="@T("Account.Login")" />
+                                <input class="csp-button" type="submit" value="@T("Account.Login")" />
                             </div>
                             <div class="csp-login-input csp-login-remember-me reversed">
                                 <input data-val="true" data-val-required="'Remember Me' must not be empty." id="RememberMe" name="RememberMe" type="checkbox" value="true"><input name="RememberMe" type="hidden" value="false">
@@ -61,7 +61,7 @@
                             }
                             <div style="clear: both;"></div>
                         </div>
-                                    <div class="csp-message-error @displayErrorMessage">@validationSummary</div>
+                        <div class="csp-message-error @displayErrorMessage">@validationSummary</div>
                     }
                 </div>
             }
@@ -82,9 +82,19 @@
                 </div>
                 <script type="text/javascript">
                     $("#countdown")
-                    .countdown("@Model.OpeningDate", function (event) {
-                        $('.weeks').html(event.strftime('%-W week%!W'));
-                        $('.days').html(event.strftime('%-d day%!d'));
+                    .countdown("@Model.OpeningDate").on('update.countdown', function (event) {
+                        if (event.offset.weeks > 0) {
+                            $('.weeks').html(event.strftime('%-W week%!W'));
+                        }
+                        else {
+                            $('.weeks').html('');
+                        }
+                        if (event.offset.totalDays > 0) {
+                            $('.days').html(event.strftime('%-d day%!d'));
+                        }
+                        else {
+                            $('.days').html('');
+                        }
                         $('.time').html(event.strftime('%H:%M:%S'));
                     });
                 </script>
@@ -95,7 +105,7 @@
                     <div class="newsletter-subscribe" id="newsletter-subscribe-block">
                         <div class="newsletter-email">
                             <input class="newsletter-subscribe-text" id="newsletter-email" name="NewsletterEmail" placeholder="Enter your email here..." type="text" value="">
-                            <input type="button" value="Subscribe" id="newsletter-subscribe-button" class="button-1 newsletter-subscribe-button">
+                            <input type="button" value="Subscribe" id="newsletter-subscribe-button" class="csp-button newsletter-subscribe-button">
                         </div>
                         <div class="newsletter-validation">
                             <span id="subscribe-loading-progress" style="display: none;" class="please-wait">Wait...</span>
