@@ -20,6 +20,7 @@ using Nop.Services.Orders;
 using Nop.Services.Authentication;
 using Nop.Services.Events;
 using Nop.Services.Logging;
+using System.Globalization;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -166,7 +167,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 
             var model = new PublicInfoModel();
             model.BackgroundUrl = GetBackgroundUrl(comingSoonPageSettings.BackgroundId);
-            model.OpeningDate = comingSoonPageSettings.OpeningDate;
+            model.OpeningDate = comingSoonPageSettings.OpeningDate.ToString(new CultureInfo("en-US"));
             model.DisplayCountdown = comingSoonPageSettings.DisplayCountdown;
             model.DisplayNewsletterBox = comingSoonPageSettings.DisplayNewsletterBox;
             model.DisplayLoginButton = comingSoonPageSettings.DisplayLoginButton;
