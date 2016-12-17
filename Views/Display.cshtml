@@ -31,25 +31,26 @@
                             <div class="csp-login-input csp-login-name">
                                 @if (Model.UsernamesEnabled)
                                 {
-                                    <input autofocus="autofocus" class="username valid" id="Username" name="Username" placeholder="Username" type="text" value="">
+                                    <input autofocus="autofocus" class="username valid" id="Username" name="Username" placeholder="@T("Account.Login.Fields.Username")" type="text" value="">
                                     <span class="field-validation-valid" data-valmsg-for="Username" data-valmsg-replace="true"></span>
                                 }
                                 else
                                 {
-                                    <input autofocus="autofocus" class="email valid" data-val="true" data-val-email="Wrong email" data-val-required="Please enter your email" id="Email" name="Email" placeholder="Email" type="text" value="">
+                                    <input autofocus="autofocus" class="email valid" data-val="true" data-val-email="@T("Common.Wrongemail")" data-val-required="@T("Account.Login.Fields.Email.Required")" id="Email" name="Email" placeholder="@T("Account.Login.Fields.Email")" type="text" value="">
                                     <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
                                 }
                             </div>
                             <div class="csp-login-input csp-login-password">
-                                <input class="csp-password" id="Password" name="Password" placeholder="Password" type="password">
+                                <input class="csp-password" id="Password" name="Password" placeholder="@T("Account.Login.Fields.Password")" type="password">
                                 <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
                             </div>
                             <div class="csp-login-input">
                                 <input class="csp-button" type="submit" value="@T("Account.Login")" />
                             </div>
                             <div class="csp-login-input csp-login-remember-me reversed">
-                                <input data-val="true" data-val-required="'Remember Me' must not be empty." id="RememberMe" name="RememberMe" type="checkbox" value="true"><input name="RememberMe" type="hidden" value="false">
-                                <label for="RememberMe">Remember me?</label>
+                                <input data-val="true" id="RememberMe" name="RememberMe" type="checkbox" value="true">
+                                <input name="RememberMe" type="hidden" value="false">
+                                <label for="RememberMe">@T("Account.Login.Fields.RememberMe")</label>
                             </div>
                             @if (Model.DisplayCaptcha)
                             {
@@ -76,6 +77,7 @@
             @if (Model.DisplayCountdown && Model.OpeningDate != null)
             {
                 <div id="countdown" class="csp-countdown csp-section">
+                    <div class="years"></div>
                     <div class="weeks"></div>
                     <div class="days"></div>
                     <div class="time"></div>
@@ -83,14 +85,20 @@
                 <script type="text/javascript">
                     $("#countdown")
                     .countdown("@Model.OpeningDate").on('update.countdown', function (event) {
+                        if (event.offset.years > 0) {
+                            $('.years').html(event.strftime('%-Y %!Y:@T("Plugins.Misc.ComingSoonPage.Countdown.Year"),@T("Plugins.Misc.ComingSoonPage.Countdown.Years");'));
+                        }
+                        else {
+                            $('.years').html('');
+                        }
                         if (event.offset.weeks > 0) {
-                            $('.weeks').html(event.strftime('%-W week%!W'));
+                            $('.weeks').html(event.strftime('%-W %!W:@T("Plugins.Misc.ComingSoonPage.Countdown.Week"),@T("Plugins.Misc.ComingSoonPage.Countdown.Weeks");'));
                         }
                         else {
                             $('.weeks').html('');
                         }
                         if (event.offset.totalDays > 0) {
-                            $('.days').html(event.strftime('%-d day%!d'));
+                            $('.days').html(event.strftime('%-d %!d:@T("Plugins.Misc.ComingSoonPage.Countdown.Day"),@T("Plugins.Misc.ComingSoonPage.Countdown.Days");'));
                         }
                         else {
                             $('.days').html('');
@@ -104,11 +112,11 @@
                 <div class="csp-newsletter csp-section">
                     <div class="newsletter-subscribe" id="newsletter-subscribe-block">
                         <div class="newsletter-email">
-                            <input class="newsletter-subscribe-text" id="newsletter-email" name="NewsletterEmail" placeholder="Enter your email here..." type="text" value="">
-                            <input type="button" value="Subscribe" id="newsletter-subscribe-button" class="csp-button newsletter-subscribe-button">
+                            <input class="newsletter-subscribe-text" id="newsletter-email" name="NewsletterEmail" placeholder="@T("Newsletter.Email.Placeholder")" type="text" value="">
+                            <input type="button" value="@T("Newsletter.Options.Subscribe")" id="newsletter-subscribe-button" class="csp-button newsletter-subscribe-button">
                         </div>
                         <div class="newsletter-validation">
-                            <span id="subscribe-loading-progress" style="display: none;" class="please-wait">Wait...</span>
+                            <span id="subscribe-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
                             <span class="field-validation-valid" data-valmsg-for="NewsletterEmail" data-valmsg-replace="true"></span>
                         </div>
                     </div>

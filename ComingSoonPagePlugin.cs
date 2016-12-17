@@ -71,6 +71,12 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox.Hint", "Check to display input for visitors to subscribe.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton", "Display login button");
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton.Hint", "Check to display login button, so administrators can still log in.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Day", "Day");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days", "Days");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week", "Week");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks", "Weeks");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year", "Year");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years", "Years");
 
 
             base.Install();
@@ -95,6 +101,12 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox.Hint");
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton");
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton.Hint");
+            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Day");
+            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days");
+            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week");
+            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks");
+            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year");
+            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years");
             base.Uninstall();
         }
 
