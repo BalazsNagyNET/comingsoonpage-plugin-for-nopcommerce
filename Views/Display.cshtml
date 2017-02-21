@@ -1,4 +1,6 @@
 ﻿@model Nop.Plugin.Misc.ComingSoonPage.Models.PublicInfoModel
+@using Nop.Core.Domain
+@using Nop.Services.Configuration
 @using Nop.Web.Framework.UI;
 @using Nop.Web.Framework.Security.Captcha;
 @{
@@ -9,6 +11,11 @@
 
     Html.AddCssFileParts("~/Plugins/Misc.ComingSoonPage/Content/css/styles.css");
     Html.AddScriptParts("~/Plugins/Misc.ComingSoonPage/Scripts/jquery.countdown.min.js");
+
+}
+@{
+    var service = Nop.Core.Infrastructure.EngineContext.Current.Resolve<ISettingService>();
+    var storeInformationSettings = service.LoadSetting<StoreInformationSettings>();
 }
 <style>
     body, .csp-login-form {
@@ -84,27 +91,27 @@
                 </div>
                 <script type="text/javascript">
                     $("#countdown")
-                    .countdown("@Model.OpeningDate").on('update.countdown', function (event) {
-                        if (event.offset.years > 0) {
-                            $('.years').html(event.strftime('%-Y %!Y:@T("Plugins.Misc.ComingSoonPage.Countdown.Year"),@T("Plugins.Misc.ComingSoonPage.Countdown.Years");'));
-                        }
-                        else {
-                            $('.years').html('');
-                        }
-                        if (event.offset.weeks > 0) {
-                            $('.weeks').html(event.strftime('%-W %!W:@T("Plugins.Misc.ComingSoonPage.Countdown.Week"),@T("Plugins.Misc.ComingSoonPage.Countdown.Weeks");'));
-                        }
-                        else {
-                            $('.weeks').html('');
-                        }
-                        if (event.offset.totalDays > 0) {
-                            $('.days').html(event.strftime('%-d %!d:@T("Plugins.Misc.ComingSoonPage.Countdown.Day"),@T("Plugins.Misc.ComingSoonPage.Countdown.Days");'));
-                        }
-                        else {
-                            $('.days').html('');
-                        }
-                        $('.time').html(event.strftime('%H:%M:%S'));
-                    });
+                        .countdown("@Model.OpeningDate").on('update.countdown', function (event) {
+                            if (event.offset.years > 0) {
+                                $('.years').html(event.strftime('%-Y %!Y:@T("Plugins.Misc.ComingSoonPage.Countdown.Year"),@T("Plugins.Misc.ComingSoonPage.Countdown.Years");'));
+                            }
+                            else {
+                                $('.years').html('');
+                            }
+                            if (event.offset.weeks > 0) {
+                                $('.weeks').html(event.strftime('%-W %!W:@T("Plugins.Misc.ComingSoonPage.Countdown.Week"),@T("Plugins.Misc.ComingSoonPage.Countdown.Weeks");'));
+                            }
+                            else {
+                                $('.weeks').html('');
+                            }
+                            if (event.offset.totalDays > 0) {
+                                $('.days').html(event.strftime('%-d %!d:@T("Plugins.Misc.ComingSoonPage.Countdown.Day"),@T("Plugins.Misc.ComingSoonPage.Countdown.Days");'));
+                            }
+                            else {
+                                $('.days').html('');
+                            }
+                            $('.time').html(event.strftime('%H:%M:%S'));
+                        });
                 </script>
             }
             @if (Model.DisplayNewsletterBox)
@@ -165,5 +172,13 @@
                 </div>
             }
         </div>
+        @if (!storeInformationSettings.HidePoweredByNopCommerce)
+        {
+            <div class="csp-footer">
+                <div class="powered-by-nopcommerce">
+                    Powered by <a href="http://www.nopcommerce.com/">nopCommerce</a>
+                </div>
+            </div>
+        }
     </div>
 </div>

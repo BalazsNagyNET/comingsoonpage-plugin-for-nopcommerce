@@ -104,6 +104,32 @@ html, body {
         display: inline-block;
         font-size: 1.3em;
     }
+
+    .csp-footer {
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+        position: fixed;
+
+        
+    }
+}
+
+
+@media screen and (max-width: 720px) {
+    .csp-footer {
+        .powered-by-nopcommerce {
+            float: none;
+        }
+    }
+}
+
+@media screen and (min-width: 721px) {
+    .csp-footer {
+        .powered-by-nopcommerce {
+            float: left;
+        }
+    }
 }
 
 @media screen and (max-width: 400px) {
