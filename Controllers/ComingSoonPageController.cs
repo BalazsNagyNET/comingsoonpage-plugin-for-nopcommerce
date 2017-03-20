@@ -178,54 +178,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         }
 
         [HttpPost]
-        [StoreClosed(true)]
-        public ActionResult Subscribe(string email) {
-            string result;
-            bool success = false;
-
-            if (!CommonHelper.IsValidEmail(email))
-            {
-                result = _localizationService.GetResource("Newsletter.Email.Wrong");
-            }
-            else
-            {
-                email = email.Trim();
-
-                var subscription = _newsLetterSubscriptionService.GetNewsLetterSubscriptionByEmailAndStoreId(email, _storeContext.CurrentStore.Id);
-                if (subscription != null)
-                {
-                        if (!subscription.Active)
-                        {
-                            _workflowMessageService.SendNewsLetterSubscriptionActivationMessage(subscription, _workContext.WorkingLanguage.Id);
-                        }
-                        result = _localizationService.GetResource("Newsletter.SubscribeEmailSent");
-                }
-                else
-                {
-                    subscription = new NewsLetterSubscription
-                    {
-                        NewsLetterSubscriptionGuid = Guid.NewGuid(),
-                        Email = email,
-                        Active = false,
-                        StoreId = _storeContext.CurrentStore.Id,
-                        CreatedOnUtc = DateTime.UtcNow
-                    };
-                    _newsLetterSubscriptionService.InsertNewsLetterSubscription(subscription);
-                    _workflowMessageService.SendNewsLetterSubscriptionActivationMessage(subscription, _workContext.WorkingLanguage.Id);
-
-                    result = _localizationService.GetResource("Newsletter.SubscribeEmailSent");
-                }
-                success = true;
-            }
-
-            return Json(new
-            {
-                Success = success,
-                Result = result,
-            });
-        }
-
-        [HttpPost]
         [CaptchaValidator]
         //available even when a store is closed
         [StoreClosed(true)]
