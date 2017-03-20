@@ -1,8 +1,8 @@
 ﻿Group: User Interface
 FriendlyName: Coming Soon Page
 SystemName: Misc.ComingSoonPage
-Version: 1.4
-SupportedVersions: 3.80
+Version: 2.0
+SupportedVersions: 3.90
 Author: Balázs Nagy
 DisplayOrder: 1
 FileName: Nop.Plugin.Misc.ComingSoonPage.dll
