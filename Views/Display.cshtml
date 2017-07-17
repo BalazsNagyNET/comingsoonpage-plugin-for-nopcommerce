@@ -129,10 +129,11 @@
                     </div>
                     <div class="newsletter-result" id="newsletter-result-block"></div>
                     <script type="text/javascript">
-                        function newsletter_subscribe() {
+                        function newsletter_subscribe(subscribe) {
                             var subscribeProgress = $("#subscribe-loading-progress");
                             subscribeProgress.show();
                             var postData = {
+                                subscribe: subscribe,
                                 email: $("#newsletter-email").val()
                             };
                             $.ajax({
@@ -159,7 +160,7 @@
 
                         $(document).ready(function () {
                             $('#newsletter-subscribe-button').click(function () {
-                                newsletter_subscribe();
+                                newsletter_subscribe('true');
                             });
                             $("#newsletter-email").keydown(function (event) {
                                 if (event.keyCode == 13) {
