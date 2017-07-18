@@ -1,7 +1,7 @@
 ﻿Group: User Interface
 FriendlyName: Coming Soon Page
 SystemName: Misc.ComingSoonPage
-Version: 2.0
+Version: 2.1
 SupportedVersions: 3.90
 Author: Balázs Nagy
 DisplayOrder: 1
