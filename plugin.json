@@ -1,0 +1,11 @@
+{
+    "Group": "User Interface",
+    "FriendlyName": "Coming Soon Page",
+    "SystemName": "Misc.ComingSoonPage",
+    "Version": "4.0",
+    "SupportedVersions": [ "4.00" ],
+    "Author": "Balázs Nagy",
+    "DisplayOrder": 1,
+    "FileName": "Nop.Plugin.Misc.ComingSoonPage.dll",
+    "Description": "Plugin to Override Store Closed Page with a Coming Soon (Maintenance) Page."
+}

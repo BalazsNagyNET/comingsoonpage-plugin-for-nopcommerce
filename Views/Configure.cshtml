@@ -1,11 +1,10 @@
-﻿@{
-    Layout = "";
+﻿@model Nop.Plugin.Misc.ComingSoonPage.Models.ConfigurationModel
+
+@{
+    Layout = "_ConfigurePlugin";
 }
-@model Nop.Plugin.Misc.ComingSoonPage.Models.ConfigurationModel
-@using Nop.Web.Framework;
 
-@Html.Action("StoreScopeConfiguration", "Setting", new { area = "Admin" })
-
+@await Component.InvokeAsync("StoreScopeConfiguration")
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -14,52 +13,52 @@
             <div class="panel-body">
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.OverrideStoreCheckboxFor(model => model.BackgroundId_OverrideForStore, model => model.BackgroundId, Model.ActiveStoreScopeConfiguration)
-                        @Html.NopLabelFor(model => model.BackgroundId)
+                        <nop-override-store-checkbox asp-for="BackgroundId_OverrideForStore" asp-input="BackgroundId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="BackgroundId" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.BackgroundId)
-                        @Html.ValidationMessageFor(model => model.BackgroundId)
+                        <nop-editor asp-for="BackgroundId" />
+                        <span asp-validation-for="BackgroundId"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.OverrideStoreCheckboxFor(model => model.OpeningDate_OverrideForStore, model => model.OpeningDate, Model.ActiveStoreScopeConfiguration)
-                        @Html.NopLabelFor(model => model.OpeningDate)
+                        <nop-override-store-checkbox asp-for="OpeningDate_OverrideForStore" asp-input="OpeningDate" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="OpeningDate" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.OpeningDate)
-                        @Html.ValidationMessageFor(model => model.OpeningDate)
+                        <nop-editor asp-for="OpeningDate" />
+                        <span asp-validation-for="OpeningDate"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.OverrideStoreCheckboxFor(model => model.DisplayCountdown_OverrideForStore, model => model.DisplayCountdown, Model.ActiveStoreScopeConfiguration)
-                        @Html.NopLabelFor(model => model.DisplayCountdown)
+                        <nop-override-store-checkbox asp-for="DisplayCountdown_OverrideForStore" asp-input="DisplayCountdown" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="DisplayCountdown" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.DisplayCountdown)
-                        @Html.ValidationMessageFor(model => model.DisplayCountdown)
+                        <nop-editor asp-for="DisplayCountdown" />
+                        <span asp-validation-for="DisplayCountdown"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.OverrideStoreCheckboxFor(model => model.DisplayNewsletterBox_OverrideForStore, model => model.DisplayNewsletterBox, Model.ActiveStoreScopeConfiguration)
-                        @Html.NopLabelFor(model => model.DisplayNewsletterBox)
+                        <nop-override-store-checkbox asp-for="DisplayNewsletterBox_OverrideForStore" asp-input="DisplayNewsletterBox" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="DisplayNewsletterBox" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.DisplayNewsletterBox)
-                        @Html.ValidationMessageFor(model => model.DisplayNewsletterBox)
+                        <nop-editor asp-for="DisplayNewsletterBox" />
+                        <span asp-validation-for="DisplayNewsletterBox"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.OverrideStoreCheckboxFor(model => model.DisplayLoginButton_OverrideForStore, model => model.DisplayLoginButton, Model.ActiveStoreScopeConfiguration)
-                        @Html.NopLabelFor(model => model.DisplayLoginButton)
+                        <nop-override-store-checkbox asp-for="DisplayLoginButton_OverrideForStore" asp-input="DisplayLoginButton" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="DisplayLoginButton" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.DisplayLoginButton)
-                        @Html.ValidationMessageFor(model => model.DisplayLoginButton)
+                        <nop-editor asp-for="DisplayLoginButton" />
+                        <span asp-validation-for="DisplayLoginButton"></span>
                     </div>
                 </div>
                 <div class="form-group">

@@ -1,4 +1,5 @@
-﻿using Nop.Core;
+﻿using Microsoft.AspNetCore.Routing;
+using Nop.Core;
 using Nop.Core.Plugins;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
@@ -6,7 +7,6 @@ using Nop.Services.Localization;
 using Nop.Services.Media;
 using System;
 using System.IO;
-using System.Web.Routing;
 
 namespace Nop.Plugin.Misc.ComingSoonPage
 {
@@ -14,13 +14,16 @@ namespace Nop.Plugin.Misc.ComingSoonPage
     {
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
+        private readonly IWebHelper _webHelper;
 
         public ComingSoonPagePlugin(IPictureService pictureService,
-            ISettingService settingService)
+            ISettingService settingService, IWebHelper webHelper)
         {
             this._pictureService = pictureService;
             this._settingService = settingService;
+            this._webHelper = webHelper;
         }
+
 
         public bool Authenticate()
         {
@@ -28,11 +31,13 @@ namespace Nop.Plugin.Misc.ComingSoonPage
         }
 
         /// <summary>
-        /// Gets a route for provider configuration
+        /// Gets a configuration page URL
         /// </summary>
-        /// <param name="actionName">Action name</param>
-        /// <param name="controllerName">Controller name</param>
-        /// <param name="routeValues">Route values</param>
+        public override string GetConfigurationPageUrl()
+        {
+            return _webHelper.GetStoreLocation() + "Admin/ComingSoonPage/Configure";
+        }
+
         public void GetConfigurationRoute(out string actionName, out string controllerName, out RouteValueDictionary routeValues)
         {
             actionName = "Configure";
