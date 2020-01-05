@@ -1,0 +1,9 @@
+﻿[
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "3.90",
+    "DirectoryPath": "ComingSoonPage/nopCommerce 3.90/Misc.ComingSoonPage/",
+    "SystemName": "Misc.ComingSoonPage",
+    "SourceDirectoryPath": "ComingSoonPage/nopCommerce 3.90/Nop.Plugin.Misc.ComingSoonPage/"
+  }
+]
