@@ -25,10 +25,9 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Infrastructure.Cache
 
         private readonly ICacheManager _cacheManager;
 
-        public ModelCacheEventConsumer()
+        public ModelCacheEventConsumer(IStaticCacheManager cacheManager)
         {
-            //TODO inject static cache manager using constructor
-            this._cacheManager = EngineContext.Current.ContainerManager.Resolve<ICacheManager>("nop_cache_static");
+            this._cacheManager = cacheManager;
         }
 
         public void HandleEvent(EntityInserted<Setting> eventMessage)

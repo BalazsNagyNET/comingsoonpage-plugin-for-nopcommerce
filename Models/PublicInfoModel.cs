@@ -1,5 +1,4 @@
-﻿using Nop.Web.Framework.Mvc;
-using System;
+﻿using Nop.Web.Framework.Mvc.Models;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Models
 {
@@ -12,6 +11,5 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Models
         public bool DisplayLoginButton { get; set; }
         public bool UsernamesEnabled { get; set; }
         public bool DisplayCaptcha { get; set; }
-        
     }
 }
