@@ -167,7 +167,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 
             var model = new PublicInfoModel();
             model.BackgroundUrl = GetBackgroundUrl(comingSoonPageSettings.BackgroundId);
-            model.OpeningDate = comingSoonPageSettings.OpeningDate.ToString(new CultureInfo("en-US"));
+            model.OpeningDate = comingSoonPageSettings.OpeningDate.ToString("yyyy/MM/dd hh:mm:ss");
             model.DisplayCountdown = comingSoonPageSettings.DisplayCountdown;
             model.DisplayNewsletterBox = comingSoonPageSettings.DisplayNewsletterBox;
             model.DisplayLoginButton = comingSoonPageSettings.DisplayLoginButton;
