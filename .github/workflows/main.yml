@@ -19,6 +19,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: src\Plugins\Nop.Plugin.Misc.ComingSoonPage\
+        ref: '${{ matrix.version }}'
     
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
