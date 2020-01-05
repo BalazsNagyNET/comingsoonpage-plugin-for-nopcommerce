@@ -5,13 +5,15 @@ on: [push]
 jobs:
   build:
     runs-on: windows-latest
-
+    strategy:
+      matrix:
+        version: ['3.90']
     steps:
     - name: Checkout nopCommerce repo
       uses: actions/checkout@v2
       with:
         repository: nopSolutions/nopCommerce
-        ref: 'release-3.90'
+        ref: 'release-${{ matrix.version }}'
     
     - name: Checkout plugin repo
       uses: actions/checkout@v2
