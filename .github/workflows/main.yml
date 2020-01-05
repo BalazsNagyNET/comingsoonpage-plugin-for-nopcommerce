@@ -31,9 +31,10 @@ jobs:
     
     - name: Build plugin with MSBuild
       run: msbuild src\Plugins\Nop.Plugin.Misc.ComingSoonPage\Nop.Plugin.Misc.ComingSoonPage.csproj -p:Configuration=Release
-        
-    - run: mkdir -p artifact
-    - run: Xcopy /E /I src\Presentation\Nop.Web\Plugins\Misc.ComingSoonPage artifact
+    
+    - run: Xcopy /E /I src\Plugins\Nop.Plugin.Misc.ComingSoonPage\ReleaseFiles artifact
+    - run: Xcopy /E /I src\Presentation\Nop.Web\Plugins\Misc.ComingSoonPage "artifact\ComingSoonPage\nopCommerce ${{ matrix.version }}\Misc.ComingSoonPage"
+    - run: Xcopy /E /I src\Plugins\Nop.Plugin.Misc.ComingSoonPage "artifact\ComingSoonPage\nopCommerce ${{ matrix.version }}\Nop.Plugin.Misc.ComingSoonPage"
     
     - uses: actions/upload-artifact@v1
       with:
