@@ -1,0 +1,39 @@
+name: CI
+
+on: [push]
+ 
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout nopCommerce repo
+      uses: actions/checkout@v2
+      with:
+        repository: nopSolutions/nopCommerce
+        ref: 'release-3.90'
+    
+    - name: Checkout plugin repo
+      uses: actions/checkout@v2
+      with:
+        path: src\Plugins\Nop.Plugin.Misc.ComingSoonPage\
+    
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+    
+    - name: Restore packages
+      run: nuget restore src\NopCommerce.sln
+    
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    
+    - name: Build plugin with MSBuild
+      run: msbuild src\Plugins\Nop.Plugin.Misc.ComingSoonPage\Nop.Plugin.Misc.ComingSoonPage.csproj -p:Configuration=Release
+        
+    - run: mkdir -p artifact
+    - run: Xcopy /E /I src\Presentation\Nop.Web\Plugins\Misc.ComingSoonPage artifact
+    
+    - uses: actions/upload-artifact@v1
+      with:
+        name: ComingSoonPage
+        path: artifact
