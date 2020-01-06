@@ -26,6 +26,9 @@ jobs:
     
     - name: Restore packages
       run: nuget restore src\NopCommerce.sln
+
+    - name: Restore packages
+      run: nuget restore src\Plugins\Nop.Plugin.Misc.ComingSoonPage\Nop.Plugin.Misc.ComingSoonPage.csproj
     
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
