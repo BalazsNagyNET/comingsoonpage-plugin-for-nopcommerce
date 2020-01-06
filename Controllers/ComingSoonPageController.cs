@@ -187,7 +187,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         [CheckAccessPublicStore(true)]
         public IActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
         {
-            var errorMessages = new List<string>();
+            var errorMessages = new List<string>() {_localizationService.GetResource("Account.Login.Unsuccessful")};
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
             {
