@@ -21,6 +21,8 @@ using Nop.Services.Logging;
 using Nop.Web.Models.Customer;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
+using Nop.Web.Factories;
+using System.Collections.Generic;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -185,10 +187,11 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         [CheckAccessPublicStore(true)]
         public IActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
         {
+            var errorMessages = new List<string>();
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
             {
-                ModelState.AddModelError("", _captchaSettings.GetWrongCaptchaMessage(_localizationService));
+                errorMessages.Add(_captchaSettings.GetWrongCaptchaMessage(_localizationService));
             }
 
             if (ModelState.IsValid)
@@ -222,28 +225,27 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
                             return Redirect(returnUrl);
                         }
                     case CustomerLoginResults.CustomerNotExist:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.CustomerNotExist"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.CustomerNotExist"));
                         break;
                     case CustomerLoginResults.Deleted:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.Deleted"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.Deleted"));
                         break;
                     case CustomerLoginResults.NotActive:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.NotActive"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.NotActive"));
                         break;
                     case CustomerLoginResults.NotRegistered:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.NotRegistered"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.NotRegistered"));
                         break;
                     case CustomerLoginResults.WrongPassword:
                     default:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials"));
                         break;
                 }
             }
 
-            //If we got this far, something failed, redisplay form
-            TempData["ModelState"] = ModelState;
+            //If we got this far, something failed, redirect to Display with error mesages in TempData
+            TempData["errors"] = string.Join("<br />", errorMessages);
             return RedirectToAction("Display");
-            //return View("~/Plugins/Misc.ComingSoonPage/Views/Display.cshtml", model);
         }
     }
 }
