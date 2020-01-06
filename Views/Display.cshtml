@@ -1,6 +1,7 @@
 ﻿@model Nop.Plugin.Misc.ComingSoonPage.Models.PublicInfoModel
-@using Nop.Core.Domain
+@using Nop.Core.Domain;
 @using Nop.Services.Configuration
+@using Nop.Web.Framework.Extensions;
 @using Nop.Web.Framework.UI;
 @using Nop.Web.Framework.Security.Captcha;
 @{
@@ -29,7 +30,7 @@
             {
                 <div class="csp-button csp-login-button" onclick="$('#csp-login-form').slideToggle();">@T("Account.Login")</div>
                 var validationSummary = Html.ValidationSummary(true, T("Account.Login.Unsuccessful").Text);
-                var displayErrorMessage = !MvcHtmlString.IsNullOrEmpty(validationSummary) ? "csp-show" : "csp-hide";
+                var displayErrorMessage = !string.IsNullOrEmpty(validationSummary.ToHtmlString()) ? "csp-show" : "csp-hide";
                 <div class="csp-login-form @displayErrorMessage" id="csp-login-form">
                     @using (Html.BeginForm("Login", "ComingSoonPage"))
                     {
