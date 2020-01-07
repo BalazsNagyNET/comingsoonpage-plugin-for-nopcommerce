@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using Nop.Core;
+using Nop.Core.Infrastructure;
 using Nop.Core.Plugins;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
@@ -12,13 +13,19 @@ namespace Nop.Plugin.Misc.ComingSoonPage
 {
     public class ComingSoonPagePlugin : BasePlugin, IMiscPlugin
     {
+        private readonly ILocalizationService _localizationService;
+        private readonly INopFileProvider _fileProvider;
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
         private readonly IWebHelper _webHelper;
 
-        public ComingSoonPagePlugin(IPictureService pictureService,
+        public ComingSoonPagePlugin(ILocalizationService localizationService,
+            INopFileProvider fileProvider,
+            IPictureService pictureService,
             ISettingService settingService, IWebHelper webHelper)
         {
+            this._localizationService = localizationService;
+            this._fileProvider = fileProvider;
             this._pictureService = pictureService;
             this._settingService = settingService;
             this._webHelper = webHelper;
@@ -48,7 +55,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage
         public override void Install()
         {
             //background
-            var sampleBackgroundPath = CommonHelper.MapPath("~/Plugins/Misc.ComingSoonPage/Content/comingsoonpage/background.jpg");
+            var sampleBackgroundPath = _fileProvider.MapPath("~/Plugins/Misc.ComingSoonPage/Content/comingsoonpage/background.jpg");
 
             //settings
             var settings = new ComingSoonPageSettings
@@ -62,26 +69,26 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             _settingService.SaveSetting(settings);
 
             //locales
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.PageTitle", "Coming soon!");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.ComingSoon", "Our new webshop is coming soon!");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.ComingSoon.Hint", "Subscribe To Get Notified");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.PageTitle", "Coming soon!");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.ComingSoon", "Our new webshop is coming soon!");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.ComingSoon.Hint", "Subscribe To Get Notified");
 
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Background", "Background");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Background.Hint", "Fullscreen background image.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.OpeningDate", "Opening date");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.OpeningDate.Hint", "Date and time when shop opens (countdown is displayed based on this setting).");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown", "Display countdown");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown.Hint", "Check to display countdown based on the opening date.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox", "Allow subscription");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox.Hint", "Check to display input for visitors to subscribe.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton", "Display login button");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton.Hint", "Check to display login button, so administrators can still log in.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Day", "Day");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days", "Days");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week", "Week");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks", "Weeks");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year", "Year");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years", "Years");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Background", "Background");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Background.Hint", "Fullscreen background image.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.OpeningDate", "Opening date");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.OpeningDate.Hint", "Date and time when shop opens (countdown is displayed based on this setting).");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown", "Display countdown");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown.Hint", "Check to display countdown based on the opening date.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox", "Allow subscription");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox.Hint", "Check to display input for visitors to subscribe.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton", "Display login button");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton.Hint", "Check to display login button, so administrators can still log in.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Day", "Day");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days", "Days");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week", "Week");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks", "Weeks");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year", "Year");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years", "Years");
 
 
             base.Install();
@@ -93,25 +100,25 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             _settingService.DeleteSetting<ComingSoonPageSettings>();
 
             //locales
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.PageTitle");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.ComingSoon");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.ComingSoon.Hint");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Background");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Background.Hint");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.OpeningDate");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.OpeningDate.Hint");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown.Hint");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox.Hint");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton.Hint");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Day");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.PageTitle");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.ComingSoon");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.ComingSoon.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Background");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Background.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.OpeningDate");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.OpeningDate.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayCountdown.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayNewsletterBox.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.DisplayLoginButton.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Day");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year");
+            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years");
             base.Uninstall();
         }
 

@@ -21,8 +21,8 @@ using Nop.Services.Logging;
 using Nop.Web.Models.Customer;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
-using Nop.Web.Factories;
 using System.Collections.Generic;
+using Nop.Core.Domain.Security;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -109,7 +109,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         public IActionResult Configure()
         {
             //load settings for a chosen store scope
-            var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
+            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
             var comingSoonPageSettings = _settingService.LoadSetting<ComingSoonPageSettings>(storeScope);
             var model = new ConfigurationModel();
             model.BackgroundId = comingSoonPageSettings.BackgroundId;
@@ -136,7 +136,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         public IActionResult Configure(ConfigurationModel model)
         {
             //load settings for a chosen store scope
-            var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
+            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
             var comingSoonPageSettings = _settingService.LoadSetting<ComingSoonPageSettings>(storeScope);
             comingSoonPageSettings.BackgroundId = model.BackgroundId;
             comingSoonPageSettings.OpeningDate = model.OpeningDate;

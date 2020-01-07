@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
-using Nop.Web.Framework.Mvc.Models;
+using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Models
