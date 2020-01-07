@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
  <PropertyGroup>
-   <TargetFramework>net461</TargetFramework>
+   <TargetFramework>netcoreapp2.1</TargetFramework>
  </PropertyGroup>
  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
    <OutputPath>..\..\Presentation\Nop.Web\Plugins\Misc.ComingSoonPage</OutputPath>
@@ -21,6 +21,7 @@
    <None Remove="Content\css\styles.css" />
    <None Remove="Content\css\styles.less" />
    <None Remove="Content\css\styles.min.css" />
+   <None Remove="plugin.json" />
    <None Remove="Scripts\jquery.countdown.min.js" />
    <None Remove="Views\Configure.cshtml" />
    <None Remove="Views\Display.cshtml" />
@@ -37,6 +38,9 @@
      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
    </Content>
    <Content Include="Content\css\styles.min.css">
+     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+   </Content>
+   <Content Include="plugin.json">
      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
    </Content>
    <Content Include="Scripts\jquery.countdown.min.js">
@@ -63,9 +67,6 @@
  <ItemGroup>
    <None Update="logo.png">
      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-   </None>
-   <None Update="plugin.json">
-     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
    </None>
  </ItemGroup>
 </Project>
