@@ -5,5 +5,12 @@
     "DirectoryPath": "ComingSoonPage/nopCommerce 3.90/Misc.ComingSoonPage/",
     "SystemName": "Misc.ComingSoonPage",
     "SourceDirectoryPath": "ComingSoonPage/nopCommerce 3.90/Nop.Plugin.Misc.ComingSoonPage/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.00",
+    "DirectoryPath": "ComingSoonPage/nopCommerce 4.00/Misc.ComingSoonPage/",
+    "SystemName": "Misc.ComingSoonPage",
+    "SourceDirectoryPath": "ComingSoonPage/nopCommerce 4.00/Nop.Plugin.Misc.ComingSoonPage/"
   }
 ]
