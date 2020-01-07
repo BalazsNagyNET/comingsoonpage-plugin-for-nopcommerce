@@ -7,7 +7,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        version: ['3.90']
+        version: ['3.90', '4.00']
     steps:
     - name: Checkout nopCommerce repo
       uses: actions/checkout@v2
@@ -19,12 +19,16 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: src\Plugins\Nop.Plugin.Misc.ComingSoonPage\
+        ref: '${{ matrix.version }}'
     
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
     
     - name: Restore packages
       run: nuget restore src\NopCommerce.sln
+
+    - name: Restore packages
+      run: nuget restore src\Plugins\Nop.Plugin.Misc.ComingSoonPage\Nop.Plugin.Misc.ComingSoonPage.csproj
     
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1

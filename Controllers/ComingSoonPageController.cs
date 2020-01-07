@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Plugin.Misc.ComingSoonPage.Infrastructure.Cache;
@@ -9,18 +10,19 @@ using Nop.Services.Media;
 using Nop.Services.Stores;
 using Nop.Web.Framework.Controllers;
 using Nop.Services.Messages;
-using Nop.Core.Domain.Messages;
 using System;
-using Nop.Web.Framework;
 using Nop.Core.Domain.Customers;
 using Nop.Web.Framework.Security.Captcha;
-using Nop.Web.Models.Customer;
 using Nop.Services.Customers;
 using Nop.Services.Orders;
 using Nop.Services.Authentication;
 using Nop.Services.Events;
 using Nop.Services.Logging;
-using System.Globalization;
+using Nop.Web.Models.Customer;
+using Nop.Web.Framework.Mvc.Filters;
+using Nop.Web.Framework;
+using Nop.Web.Factories;
+using System.Collections.Generic;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -37,7 +39,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         //needed for subscription action (will be not necessary from nopCommerce 3.90)
         private readonly INewsLetterSubscriptionService _newsLetterSubscriptionService;
         private readonly IWorkflowMessageService _workflowMessageService;
-        
+
         //needed for login action
         private readonly CustomerSettings _customerSettings;
         private readonly CaptchaSettings _captchaSettings;
@@ -102,9 +104,9 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             });
         }
 
-        [AdminAuthorize]
-        [ChildActionOnly]
-        public ActionResult Configure()
+        [AuthorizeAdmin]
+        [Area(AreaNames.Admin)]
+        public IActionResult Configure()
         {
             //load settings for a chosen store scope
             var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
@@ -129,9 +131,9 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         }
 
         [HttpPost]
-        [AdminAuthorize]
-        [ChildActionOnly]
-        public ActionResult Configure(ConfigurationModel model)
+        [AuthorizeAdmin]
+        [Area(AreaNames.Admin)]
+        public IActionResult Configure(ConfigurationModel model)
         {
             //load settings for a chosen store scope
             var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
@@ -143,7 +145,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             comingSoonPageSettings.DisplayLoginButton = model.DisplayLoginButton;
 
             /* We do not clear cache after each setting update.
-             * This behavior can increase performance because cached settings will not be cleared 
+             * This behavior can increase performance because cached settings will not be cleared
              * and loaded from database after each update */
             _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.BackgroundId, model.BackgroundId_OverrideForStore, storeScope, false);
             _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.OpeningDate, model.OpeningDate_OverrideForStore, storeScope, false);
@@ -158,7 +160,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             return Configure();
         }
 
-        public ActionResult Display()
+        public IActionResult Display()
         {
             if (TempData.ContainsKey("ModelState"))
                 ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
@@ -178,17 +180,18 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         }
 
         [HttpPost]
-        [CaptchaValidator]
+        [ValidateCaptcha]
         //available even when a store is closed
-        [StoreClosed(true)]
+        [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
-        [PublicStoreAllowNavigation(true)]
-        public ActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
+        [CheckAccessPublicStore(true)]
+        public IActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
         {
+            var errorMessages = new List<string>() {_localizationService.GetResource("Account.Login.Unsuccessful")};
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
             {
-                ModelState.AddModelError("", _captchaSettings.GetWrongCaptchaMessage(_localizationService));
+                errorMessages.Add(_captchaSettings.GetWrongCaptchaMessage(_localizationService));
             }
 
             if (ModelState.IsValid)
@@ -210,7 +213,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
                             //sign in new customer
                             _authenticationService.SignIn(customer, model.RememberMe);
 
-                            //raise event       
+                            //raise event
                             _eventPublisher.Publish(new CustomerLoggedinEvent(customer));
 
                             //activity log
@@ -222,28 +225,27 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
                             return Redirect(returnUrl);
                         }
                     case CustomerLoginResults.CustomerNotExist:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.CustomerNotExist"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.CustomerNotExist"));
                         break;
                     case CustomerLoginResults.Deleted:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.Deleted"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.Deleted"));
                         break;
                     case CustomerLoginResults.NotActive:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.NotActive"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.NotActive"));
                         break;
                     case CustomerLoginResults.NotRegistered:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials.NotRegistered"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.NotRegistered"));
                         break;
                     case CustomerLoginResults.WrongPassword:
                     default:
-                        ModelState.AddModelError("", _localizationService.GetResource("Account.Login.WrongCredentials"));
+                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials"));
                         break;
                 }
             }
 
-            //If we got this far, something failed, redisplay form
-            TempData["ModelState"] = ModelState;
+            //If we got this far, something failed, redirect to Display with error mesages in TempData
+            TempData["errors"] = string.Join("<br />", errorMessages);
             return RedirectToAction("Display");
-            //return View("~/Plugins/Misc.ComingSoonPage/Views/Display.cshtml", model);
         }
     }
 }
