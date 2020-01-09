@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using Nop.Core;
 using Nop.Core.Infrastructure;
-using Nop.Core.Plugins;
+using Nop.Services.Plugins;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
