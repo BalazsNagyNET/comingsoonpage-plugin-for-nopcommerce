@@ -12,7 +12,6 @@ using Nop.Web.Framework.Controllers;
 using Nop.Services.Messages;
 using System;
 using Nop.Core.Domain.Customers;
-using Nop.Web.Framework.Security.Captcha;
 using Nop.Services.Customers;
 using Nop.Services.Orders;
 using Nop.Services.Authentication;
@@ -29,6 +28,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
     public class ComingSoonPageController : BasePluginController
     {
         private readonly IWorkContext _workContext;
+        private readonly INotificationService _notificationService;
         private readonly IStoreContext _storeContext;
         private readonly IStoreService _storeService;
         private readonly IPictureService _pictureService;
@@ -51,6 +51,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         private ICustomerActivityService _customerActivityService;
 
         public ComingSoonPageController(IWorkContext workContext,
+            INotificationService notificationService,
             IStoreContext storeContext,
             IStoreService storeService,
             IPictureService pictureService,
@@ -70,6 +71,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             ICustomerActivityService customerActivityService)
         {
             this._workContext = workContext;
+            this._notificationService = notificationService;
             this._storeContext = storeContext;
             this._storeService = storeService;
             this._pictureService = pictureService;
@@ -156,7 +158,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             //now clear settings cache
             _settingService.ClearCache();
 
-            SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
             return Configure();
         }
 
@@ -191,7 +193,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
             {
-                errorMessages.Add(_captchaSettings.GetWrongCaptchaMessage(_localizationService));
+                errorMessages.Add(_localizationService.GetResource("Common.WrongCaptchaMessage"));
             }
 
             if (ModelState.IsValid)

@@ -1,7 +1,6 @@
 ﻿using Nop.Core.Caching;
 using Nop.Core.Domain.Configuration;
 using Nop.Core.Events;
-using Nop.Core.Infrastructure;
 using Nop.Services.Events;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Infrastructure.Cache
@@ -32,15 +31,15 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Infrastructure.Cache
 
         public void HandleEvent(EntityInsertedEvent<Setting> eventMessage)
         {
-            _cacheManager.RemoveByPattern(BACKGROUND_URL_PATTERN_KEY);
+            _cacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
         }
         public void HandleEvent(EntityUpdatedEvent<Setting> eventMessage)
         {
-            _cacheManager.RemoveByPattern(BACKGROUND_URL_PATTERN_KEY);
+            _cacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
         }
         public void HandleEvent(EntityDeletedEvent<Setting> eventMessage)
         {
-            _cacheManager.RemoveByPattern(BACKGROUND_URL_PATTERN_KEY);
+            _cacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
         }
     }
 }
