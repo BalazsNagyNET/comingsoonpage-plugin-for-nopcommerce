@@ -22,6 +22,7 @@ using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
 using System.Collections.Generic;
 using Nop.Core.Domain.Security;
+using Nop.Services.Caching;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -33,7 +34,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         private readonly IStoreService _storeService;
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
-        private readonly ICacheManager _cacheManager;
+        private readonly IStaticCacheManager _staticCacheManager;
+        private readonly ICacheKeyService _cacheKeyService;
         private readonly ILocalizationService _localizationService;
 
         //needed for subscription action (will be not necessary from nopCommerce 3.90)
@@ -56,7 +58,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             IStoreService storeService,
             IPictureService pictureService,
             ISettingService settingService,
-            ICacheManager cacheManager,
+            IStaticCacheManager staticCacheManager,
+            ICacheKeyService cacheKeyService,
             ILocalizationService localizationService,
             INewsLetterSubscriptionService newsLetterSubscriptionService,
             IWorkflowMessageService workflowMessageService,
@@ -76,7 +79,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             this._storeService = storeService;
             this._pictureService = pictureService;
             this._settingService = settingService;
-            this._cacheManager = cacheManager;
+            this._staticCacheManager = staticCacheManager;
+            this._cacheKeyService = cacheKeyService;
             this._localizationService = localizationService;
             this._newsLetterSubscriptionService = newsLetterSubscriptionService;
             this._workflowMessageService = workflowMessageService;
@@ -94,14 +98,11 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 
         protected string GetBackgroundUrl(int backgroundId)
         {
-            string cacheKey = string.Format(ModelCacheEventConsumer.BACKGROUND_URL_MODEL_KEY, backgroundId);
-            return _cacheManager.Get(cacheKey, () =>
+            var cacheKey = _cacheKeyService.PrepareKey(ModelCacheEventConsumer.BACKGROUND_URL_MODEL_KEY, backgroundId);
+            return _staticCacheManager.Get(cacheKey, () =>
             {
-                var url = _pictureService.GetPictureUrl(backgroundId, showDefaultPicture: false);
                 //little hack here. nulls aren't cacheable so set it to ""
-                if (url == null)
-                    url = "";
-
+                var url = _pictureService.GetPictureUrl(backgroundId, showDefaultPicture: false) ?? "";
                 return url;
             });
         }
