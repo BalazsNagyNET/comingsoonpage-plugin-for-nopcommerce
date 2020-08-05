@@ -32,46 +32,47 @@
                 var errorMessages = (string)TempData["errors"];
                 var displayErrorMessage = !string.IsNullOrEmpty(errorMessages) ? "csp-show" : "csp-hide";
                 <div class="csp-login-form @displayErrorMessage" id="csp-login-form">
-                    @using (Html.BeginForm("Login", "ComingSoonPage"))
-                    {
-
+                    <form asp-action="Login" asp-controller="ComingSoonPage" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post" autocomplete="off">
                         <div class="csp-form-fields">
                             <div class="csp-login-input csp-login-name">
                                 @if (Model.UsernamesEnabled)
                                 {
-                                    <input autofocus="autofocus" class="username valid" id="Username" name="Username" placeholder="@T("Account.Login.Fields.Username")" type="text" value="">
-                                    <span class="field-validation-valid" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+                                    <input asp-for="Username" class="username" autofocus="autofocus" />
+                                    <span asp-validation-for="Username"></span>
                                 }
                                 else
                                 {
-                                    <input autofocus="autofocus" class="email valid" data-val="true" data-val-email="@T("Common.Wrongemail")" data-val-required="@T("Account.Login.Fields.Email.Required")" id="Email" name="Email" placeholder="@T("Account.Login.Fields.Email")" type="text" value="">
-                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                    <input asp-for="Email" class="email" autofocus="autofocus" />
+                                    <span asp-validation-for="Email"></span>
+
                                 }
                             </div>
                             <div class="csp-login-input csp-login-password">
-                                <input class="csp-password" id="Password" name="Password" placeholder="@T("Account.Login.Fields.Password")" type="password">
-                                <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                                <input asp-for="Password" class="csp-password" />
+                                <span asp-validation-for="Password"></span>
                             </div>
                             <div class="csp-login-input">
-                                <input class="csp-button" type="submit" value="@T("Account.Login")" />
+                                <input class="csp-button" type="submit" value="@T("Account.Login.LoginButton")" />
                             </div>
                             <div class="csp-login-input csp-login-remember-me reversed">
-                                <input data-val="true" id="RememberMe" name="RememberMe" type="checkbox" value="true">
-                                <input name="RememberMe" type="hidden" value="false">
-                                <label for="RememberMe">@T("Account.Login.Fields.RememberMe")</label>
+                                <input asp-for="RememberMe" />
+                                <label asp-for="RememberMe"></label>
+                                <span class="forgot-password">
+                                    <a asp-route="PasswordRecovery">@T("Account.Login.ForgotPassword")</a>
+                                </span>
                             </div>
                             @if (Model.DisplayCaptcha)
                             {
                                 <div class="csp-login-input csp-login-captcha">
                                     <div class="csp-captcha-box">
-                                        @Html.Raw(Html.GenerateCaptcha())
+                                        <nop-captcha />
                                     </div>
                                 </div>
                             }
                             <div style="clear: both;"></div>
                         </div>
                         <div class="csp-message-error @displayErrorMessage">@Html.Raw(errorMessages)</div>
-                    }
+                    </form>
                 </div>
             }
         </div>
