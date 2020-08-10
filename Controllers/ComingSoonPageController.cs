@@ -190,11 +190,11 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         [CheckAccessPublicStore(true)]
         public IActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
         {
-            var errorMessages = new List<string>() {_localizationService.GetResource("Account.Login.Unsuccessful")};
+            TempData["errors"] = _localizationService.GetResource("Account.Login.Unsuccessful");
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
             {
-                errorMessages.Add(_localizationService.GetResource("Common.WrongCaptchaMessage"));
+                AddErrorMessage(_localizationService.GetResource("Common.WrongCaptchaMessage"));
             }
 
             if (ModelState.IsValid)
@@ -228,27 +228,31 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
                             return Redirect(returnUrl);
                         }
                     case CustomerLoginResults.CustomerNotExist:
-                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.CustomerNotExist"));
+                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials.CustomerNotExist"));
                         break;
                     case CustomerLoginResults.Deleted:
-                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.Deleted"));
+                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials.Deleted"));
                         break;
                     case CustomerLoginResults.NotActive:
-                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.NotActive"));
+                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials.NotActive"));
                         break;
                     case CustomerLoginResults.NotRegistered:
-                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials.NotRegistered"));
+                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials.NotRegistered"));
                         break;
                     case CustomerLoginResults.WrongPassword:
                     default:
-                        errorMessages.Add(_localizationService.GetResource("Account.Login.WrongCredentials"));
+                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials"));
                         break;
                 }
             }
 
             //If we got this far, something failed, redirect to Display with error mesages in TempData
-            TempData["errors"] = string.Join("<br />", errorMessages);
             return RedirectToAction("Display");
+        }
+
+        private void AddErrorMessage(string message)
+        {
+            TempData["errors"] += $"<br />{message}";
         }
     }
 }
