@@ -28,7 +28,8 @@
         <div class="csp-heading">
             @if (Model.DisplayLoginButton)
             {
-                <div class="csp-button csp-login-button" onclick="$('#csp-login-form').slideToggle();">@T("Account.Login")</div>
+                <div id="csp-show-login" class="csp-button csp-login-button" onclick="$('#csp-login-form').slideToggle(); $('#csp-hide-login').show(); $('#csp-show-login').hide();">@T("Admin.Common.Show") @T("Account.Login")</div>
+                <div id="csp-hide-login" class="csp-button csp-login-button csp-hide" onclick="$('#csp-login-form').slideToggle(); $('#csp-hide-login').hide(); $('#csp-show-login').show();">@T("Admin.Common.Hide") @T("Account.Login")</div>
                 var errorMessages = (string)TempData["errors"];
                 var displayErrorMessage = !string.IsNullOrEmpty(errorMessages) ? "csp-show" : "csp-hide";
                 <div class="csp-login-form @displayErrorMessage" id="csp-login-form">
