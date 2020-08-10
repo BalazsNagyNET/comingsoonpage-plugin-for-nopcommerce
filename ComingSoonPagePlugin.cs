@@ -87,8 +87,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days", "Days");
             _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week", "Week");
             _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks", "Weeks");
-            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year", "Year");
-            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years", "Years");
 
 
             base.Install();
@@ -117,8 +115,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days");
             _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week");
             _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks");
-            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year");
-            _localizationService.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years");
             base.Uninstall();
         }
 
