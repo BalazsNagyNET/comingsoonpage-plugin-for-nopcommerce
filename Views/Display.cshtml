@@ -32,7 +32,7 @@
                 var errorMessages = (string)TempData["errors"];
                 var displayErrorMessage = !string.IsNullOrEmpty(errorMessages) ? "csp-show" : "csp-hide";
                 <div class="csp-login-form @displayErrorMessage" id="csp-login-form">
-                    <form asp-action="Login" asp-controller="ComingSoonPage" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post" autocomplete="off">
+                    <form asp-action="Login" asp-controller="ComingSoonPage" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post">
                         <div class="csp-form-fields">
                             <div class="csp-login-input csp-login-name">
                                 @if (Model.UsernamesEnabled)
