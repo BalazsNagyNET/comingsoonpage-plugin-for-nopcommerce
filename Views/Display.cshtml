@@ -11,7 +11,7 @@
     Html.AddTitleParts(T("Plugins.Misc.ComingSoonPage.PageTitle").Text);
 
     Html.AddCssFileParts("~/Plugins/Misc.ComingSoonPage/Content/css/styles.css");
-    Html.AddScriptParts("~/Plugins/Misc.ComingSoonPage/Scripts/jquery.countdown.min.js");
+    Html.AddScriptParts(ResourceLocation.Footer, "~/Plugins/Misc.ComingSoonPage/Scripts/jquery.countdown.min.js");
 
 }
 @{
@@ -91,7 +91,7 @@
                     <div class="days"></div>
                     <div class="time"></div>
                 </div>
-                <script type="text/javascript">
+                <script asp-location="Footer">
                     $("#countdown")
                         .countdown("@Model.OpeningDate").on('update.countdown', function (event) {
                             if (event.offset.years > 0) {
@@ -130,7 +130,7 @@
                         </div>
                     </div>
                     <div class="newsletter-result" id="newsletter-result-block"></div>
-                    <script type="text/javascript">
+                    <script asp-location="Footer">
                         function newsletter_subscribe(subscribe) {
                             var subscribeProgress = $("#subscribe-loading-progress");
                             subscribeProgress.show();
