@@ -57,9 +57,6 @@
                             <div class="csp-login-input csp-login-remember-me reversed">
                                 <input asp-for="RememberMe" />
                                 <label asp-for="RememberMe"></label>
-                                <span class="forgot-password">
-                                    <a asp-route="PasswordRecovery">@T("Account.Login.ForgotPassword")</a>
-                                </span>
                             </div>
                             @if (Model.DisplayCaptcha)
                             {
