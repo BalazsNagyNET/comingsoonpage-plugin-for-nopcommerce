@@ -20,7 +20,6 @@ using Nop.Services.Logging;
 using Nop.Web.Models.Customer;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
-using System.Collections.Generic;
 using Nop.Core.Domain.Security;
 using Nop.Services.Caching;
 
