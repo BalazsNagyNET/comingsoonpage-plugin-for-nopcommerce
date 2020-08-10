@@ -14,6 +14,13 @@ namespace Nop.Plugin.Misc.ComingSoonPage
                 new { },
                 new[] { "Plugin.Misc.ComingSoonPage.Controllers" }
                 );
+
+            endpointRouteBuilder.MapControllerRoute("Plugin.Misc.ComingSoonPage.Login",
+                "login/",
+                new { controller = "ComingSoonPage", action = "Display" },
+                new { },
+                new[] { "Plugin.Misc.ComingSoonPage.Controllers" }
+                );
         }
 
         public int Priority
