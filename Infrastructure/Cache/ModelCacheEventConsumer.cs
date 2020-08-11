@@ -19,27 +19,27 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Infrastructure.Cache
         /// <remarks>
         /// {0} : picture id
         /// </remarks>
-        public const string BACKGROUND_URL_MODEL_KEY = "Nop.plugins.misc.comingsoonpage.pictureurl-{0}";
+        public static CacheKey BACKGROUND_URL_MODEL_KEY = new CacheKey("Nop.plugins.misc.comingsoonpage.pictureurl-{0}", BACKGROUND_URL_PATTERN_KEY);
         public const string BACKGROUND_URL_PATTERN_KEY = "Nop.plugins.misc.comingsoonpage";
 
-        private readonly ICacheManager _cacheManager;
+        private readonly IStaticCacheManager _staticCacheManager;
 
-        public ModelCacheEventConsumer(IStaticCacheManager cacheManager)
+        public ModelCacheEventConsumer(IStaticCacheManager staticCacheManager)
         {
-            this._cacheManager = cacheManager;
+            this._staticCacheManager = staticCacheManager;
         }
 
         public void HandleEvent(EntityInsertedEvent<Setting> eventMessage)
         {
-            _cacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
+            _staticCacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
         }
         public void HandleEvent(EntityUpdatedEvent<Setting> eventMessage)
         {
-            _cacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
+            _staticCacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
         }
         public void HandleEvent(EntityDeletedEvent<Setting> eventMessage)
         {
-            _cacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
+            _staticCacheManager.RemoveByPrefix(BACKGROUND_URL_PATTERN_KEY);
         }
     }
 }

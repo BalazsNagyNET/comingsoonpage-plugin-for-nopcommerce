@@ -41,11 +41,10 @@ html, body {
 
 
 
-        .csp-login-button {
+        .csp-show-login {
             position: absolute;
             top: 15px;
             right: 15px;
-            z-index: 1;
         }
 
         .csp-login-form {
@@ -59,6 +58,13 @@ html, body {
             background-attachment: fixed;
             background-size: cover;
             box-shadow: inset 4000px 0 0 0 rgba(0, 0, 0, 0.7);
+
+            .csp-hide-login {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 28px;
+            }
 
             .csp-message-error {
                 margin-top: 15px;
@@ -110,8 +116,6 @@ html, body {
         left: 15px;
         right: 15px;
         position: fixed;
-
-        
     }
 }
 

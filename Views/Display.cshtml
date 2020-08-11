@@ -11,7 +11,7 @@
     Html.AddTitleParts(T("Plugins.Misc.ComingSoonPage.PageTitle").Text);
 
     Html.AddCssFileParts("~/Plugins/Misc.ComingSoonPage/Content/css/styles.css");
-    Html.AddScriptParts("~/Plugins/Misc.ComingSoonPage/Scripts/jquery.countdown.min.js");
+    Html.AddScriptParts(ResourceLocation.Footer, "~/Plugins/Misc.ComingSoonPage/Scripts/jquery.countdown.min.js");
 
 }
 @{
@@ -28,50 +28,49 @@
         <div class="csp-heading">
             @if (Model.DisplayLoginButton)
             {
-                <div class="csp-button csp-login-button" onclick="$('#csp-login-form').slideToggle();">@T("Account.Login")</div>
+                <div class="csp-button csp-show-login" onclick="$('#csp-login-form').slideToggle();">@T("Account.Login")</div>
                 var errorMessages = (string)TempData["errors"];
                 var displayErrorMessage = !string.IsNullOrEmpty(errorMessages) ? "csp-show" : "csp-hide";
                 <div class="csp-login-form @displayErrorMessage" id="csp-login-form">
-                    @using (Html.BeginForm("Login", "ComingSoonPage"))
-                    {
-
+                    <div class="csp-button csp-hide-login" onclick="$('#csp-login-form').slideToggle();">X</div>
+                    <form asp-action="Login" asp-controller="ComingSoonPage" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post">
                         <div class="csp-form-fields">
                             <div class="csp-login-input csp-login-name">
                                 @if (Model.UsernamesEnabled)
                                 {
-                                    <input autofocus="autofocus" class="username valid" id="Username" name="Username" placeholder="@T("Account.Login.Fields.Username")" type="text" value="">
-                                    <span class="field-validation-valid" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+                                    <input asp-for="Username" class="username" autofocus="autofocus" />
+                                    <span asp-validation-for="Username"></span>
                                 }
                                 else
                                 {
-                                    <input autofocus="autofocus" class="email valid" data-val="true" data-val-email="@T("Common.Wrongemail")" data-val-required="@T("Account.Login.Fields.Email.Required")" id="Email" name="Email" placeholder="@T("Account.Login.Fields.Email")" type="text" value="">
-                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                    <input asp-for="Email" class="email" autofocus="autofocus" />
+                                    <span asp-validation-for="Email"></span>
+
                                 }
                             </div>
                             <div class="csp-login-input csp-login-password">
-                                <input class="csp-password" id="Password" name="Password" placeholder="@T("Account.Login.Fields.Password")" type="password">
-                                <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                                <input asp-for="Password" class="csp-password" />
+                                <span asp-validation-for="Password"></span>
                             </div>
                             <div class="csp-login-input">
-                                <input class="csp-button" type="submit" value="@T("Account.Login")" />
+                                <input class="csp-button" type="submit" value="@T("Account.Login.LoginButton")" />
                             </div>
                             <div class="csp-login-input csp-login-remember-me reversed">
-                                <input data-val="true" id="RememberMe" name="RememberMe" type="checkbox" value="true">
-                                <input name="RememberMe" type="hidden" value="false">
-                                <label for="RememberMe">@T("Account.Login.Fields.RememberMe")</label>
+                                <input asp-for="RememberMe" />
+                                <label asp-for="RememberMe"></label>
                             </div>
                             @if (Model.DisplayCaptcha)
                             {
                                 <div class="csp-login-input csp-login-captcha">
                                     <div class="csp-captcha-box">
-                                        @Html.Raw(Html.GenerateCaptcha())
+                                        <nop-captcha />
                                     </div>
                                 </div>
                             }
                             <div style="clear: both;"></div>
                         </div>
                         <div class="csp-message-error @displayErrorMessage">@Html.Raw(errorMessages)</div>
-                    }
+                    </form>
                 </div>
             }
         </div>
@@ -85,22 +84,15 @@
             @if (Model.DisplayCountdown && Model.OpeningDate != null)
             {
                 <div id="countdown" class="csp-countdown csp-section">
-                    <div class="years"></div>
                     <div class="weeks"></div>
                     <div class="days"></div>
                     <div class="time"></div>
                 </div>
-                <script type="text/javascript">
+                <script asp-location="Footer">
                     $("#countdown")
                         .countdown("@Model.OpeningDate").on('update.countdown', function (event) {
-                            if (event.offset.years > 0) {
-                                $('.years').html(event.strftime('%-Y %!Y:@T("Plugins.Misc.ComingSoonPage.Countdown.Year"),@T("Plugins.Misc.ComingSoonPage.Countdown.Years");'));
-                            }
-                            else {
-                                $('.years').html('');
-                            }
                             if (event.offset.weeks > 0) {
-                                $('.weeks').html(event.strftime('%-W %!W:@T("Plugins.Misc.ComingSoonPage.Countdown.Week"),@T("Plugins.Misc.ComingSoonPage.Countdown.Weeks");'));
+                                $('.weeks').html(event.strftime('%-w %!w:@T("Plugins.Misc.ComingSoonPage.Countdown.Week"),@T("Plugins.Misc.ComingSoonPage.Countdown.Weeks");'));
                             }
                             else {
                                 $('.weeks').html('');
@@ -129,7 +121,7 @@
                         </div>
                     </div>
                     <div class="newsletter-result" id="newsletter-result-block"></div>
-                    <script type="text/javascript">
+                    <script asp-location="Footer">
                         function newsletter_subscribe(subscribe) {
                             var subscribeProgress = $("#subscribe-loading-progress");
                             subscribeProgress.show();
