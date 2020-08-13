@@ -8,19 +8,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage
     {
         public void RegisterRoutes(IEndpointRouteBuilder endpointRouteBuilder)
         {
-            endpointRouteBuilder.MapControllerRoute("Plugin.Misc.ComingSoonPage.Display",
-                "storeclosed/",
-                new { controller = "ComingSoonPage", action = "Display" },
-                new { },
-                new[] { "Plugin.Misc.ComingSoonPage.Controllers" }
-                );
-
-            endpointRouteBuilder.MapControllerRoute("Plugin.Misc.ComingSoonPage.Login",
-                "login/",
-                new { controller = "ComingSoonPage", action = "Display" },
-                new { },
-                new[] { "Plugin.Misc.ComingSoonPage.Controllers" }
-                );
+            endpointRouteBuilder.MapControllerRoute(ComingSoonPageDefaults.Display, "storeclosed/",
+                new { controller = "ComingSoonPage", action = "Display" });
         }
 
         public int Priority
