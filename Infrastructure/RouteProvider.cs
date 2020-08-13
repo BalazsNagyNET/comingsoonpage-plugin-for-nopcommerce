@@ -10,9 +10,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage
         {
             endpointRouteBuilder.MapControllerRoute(ComingSoonPageDefaults.Display, "storeclosed/",
                 new { controller = "ComingSoonPage", action = "Display" });
-
-            endpointRouteBuilder.MapControllerRoute(ComingSoonPageDefaults.Login, "login/",
-                new { controller = "ComingSoonPage", action = "Display" });
         }
 
         public int Priority
