@@ -7,19 +7,24 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        version: ['3.90', '4.00', '4.10', '4.20', '4.30']
+        args:
+          - { version : '3.90', tag : '3.90'}
+          - { version : '4.00', tag : '4.00'}
+          - { version : '4.10', tag : '4.10'}
+          - { version : '4.20', tag : '4.20'}
+          - { version : '4.30', tag : '4.30.1'}
     steps:
     - name: Checkout nopCommerce repo
       uses: actions/checkout@v2
       with:
         repository: nopSolutions/nopCommerce
-        ref: 'release-${{ matrix.version }}'
+        ref: 'release-${{ matrix.args.version }}'
 
     - name: Checkout plugin repo
       uses: actions/checkout@v2
       with:
         path: src\Plugins\Nop.Plugin.Misc.ComingSoonPage\
-        ref: '${{ matrix.version }}'
+        ref: '${{ matrix.args.tag }}'
 
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
@@ -32,25 +37,25 @@ jobs:
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.1
-      if: matrix.version <= '4.10'
+      if: matrix.args.version <= '4.10'
 
     - name: Build plugin with MSBuild
       run: msbuild src\Plugins\Nop.Plugin.Misc.ComingSoonPage\Nop.Plugin.Misc.ComingSoonPage.csproj -p:Configuration=Release
-      if: matrix.version <= '4.10'
+      if: matrix.args.version <= '4.10'
 
     - name: Setup dotnet build
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '2.2.x'
-      if: matrix.version > '4.10'
+      if: matrix.args.version > '4.10'
 
     - name: Build plugin with dotnet
       run: dotnet build src\Plugins\Nop.Plugin.Misc.ComingSoonPage\Nop.Plugin.Misc.ComingSoonPage.csproj --configuration Release
-      if: matrix.version > '4.10'
+      if: matrix.args.version > '4.10'
 
     - run: Xcopy /E /I src\Plugins\Nop.Plugin.Misc.ComingSoonPage\ReleaseFiles artifact
-    - run: Xcopy /E /I src\Presentation\Nop.Web\Plugins\Misc.ComingSoonPage "artifact\ComingSoonPage\nopCommerce ${{ matrix.version }}\Misc.ComingSoonPage"
-    - run: Xcopy /E /I src\Plugins\Nop.Plugin.Misc.ComingSoonPage "artifact\ComingSoonPage\nopCommerce ${{ matrix.version }}\Nop.Plugin.Misc.ComingSoonPage"
+    - run: Xcopy /E /I src\Presentation\Nop.Web\Plugins\Misc.ComingSoonPage "artifact\ComingSoonPage\nopCommerce ${{ matrix.args.version }}\Misc.ComingSoonPage"
+    - run: Xcopy /E /I src\Plugins\Nop.Plugin.Misc.ComingSoonPage "artifact\ComingSoonPage\nopCommerce ${{ matrix.args.version }}\Nop.Plugin.Misc.ComingSoonPage"
 
     - uses: actions/upload-artifact@v1
       with:
