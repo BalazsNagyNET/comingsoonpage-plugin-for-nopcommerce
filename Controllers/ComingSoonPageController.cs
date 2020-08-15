@@ -194,6 +194,8 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
             {
                 errorMessages.Add(_localizationService.GetResource("Common.WrongCaptchaMessage"));
+                TempData["errors"] = string.Join("<br />", errorMessages);
+                return RedirectToAction("Display");
             }
 
             if (ModelState.IsValid)
