@@ -11,7 +11,7 @@ jobs:
           - { version : '3.90', tag : '3.90'}
           - { version : '4.00', tag : '4.00'}
           - { version : '4.10', tag : '4.10'}
-          - { version : '4.20', tag : '4.20'}
+          - { version : '4.20', tag : '4.20.1'}
           - { version : '4.30', tag : '4.30.1'}
     steps:
     - name: Checkout nopCommerce repo
