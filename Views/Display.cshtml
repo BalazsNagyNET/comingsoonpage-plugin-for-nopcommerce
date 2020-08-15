@@ -85,7 +85,6 @@
             @if (Model.DisplayCountdown && Model.OpeningDate != null)
             {
                 <div id="countdown" class="csp-countdown csp-section">
-                    <div class="years"></div>
                     <div class="weeks"></div>
                     <div class="days"></div>
                     <div class="time"></div>
@@ -93,14 +92,8 @@
                 <script asp-location="Footer">
                     $("#countdown")
                         .countdown("@Model.OpeningDate").on('update.countdown', function (event) {
-                            if (event.offset.years > 0) {
-                                $('.years').html(event.strftime('%-Y %!Y:@T("Plugins.Misc.ComingSoonPage.Countdown.Year"),@T("Plugins.Misc.ComingSoonPage.Countdown.Years");'));
-                            }
-                            else {
-                                $('.years').html('');
-                            }
                             if (event.offset.weeks > 0) {
-                                $('.weeks').html(event.strftime('%-W %!W:@T("Plugins.Misc.ComingSoonPage.Countdown.Week"),@T("Plugins.Misc.ComingSoonPage.Countdown.Weeks");'));
+                                $('.weeks').html(event.strftime('%-w %!w:@T("Plugins.Misc.ComingSoonPage.Countdown.Week"),@T("Plugins.Misc.ComingSoonPage.Countdown.Weeks");'));
                             }
                             else {
                                 $('.weeks').html('');
