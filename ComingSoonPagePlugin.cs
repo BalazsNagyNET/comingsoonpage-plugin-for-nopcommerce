@@ -80,8 +80,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days", "Days");
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week", "Week");
             this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks", "Weeks");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year", "Year");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years", "Years");
 
 
             base.Install();
@@ -110,8 +108,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Days");
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Week");
             this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Weeks");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Year");
-            this.DeletePluginLocaleResource("Plugins.Misc.ComingSoonPage.Countdown.Years");
             base.Uninstall();
         }
 
