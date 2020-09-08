@@ -15,13 +15,12 @@ using Nop.Core.Domain.Customers;
 using Nop.Services.Customers;
 using Nop.Services.Orders;
 using Nop.Services.Authentication;
-using Nop.Services.Events;
 using Nop.Services.Logging;
 using Nop.Web.Models.Customer;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
 using Nop.Core.Domain.Security;
-using Nop.Services.Caching;
+using Nop.Core.Events;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -34,7 +33,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
         private readonly IStaticCacheManager _staticCacheManager;
-        private readonly ICacheKeyService _cacheKeyService;
         private readonly ILocalizationService _localizationService;
 
         //needed for subscription action (will be not necessary from nopCommerce 3.90)
@@ -58,7 +56,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             IPictureService pictureService,
             ISettingService settingService,
             IStaticCacheManager staticCacheManager,
-            ICacheKeyService cacheKeyService,
             ILocalizationService localizationService,
             INewsLetterSubscriptionService newsLetterSubscriptionService,
             IWorkflowMessageService workflowMessageService,
@@ -79,7 +76,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             this._pictureService = pictureService;
             this._settingService = settingService;
             this._staticCacheManager = staticCacheManager;
-            this._cacheKeyService = cacheKeyService;
             this._localizationService = localizationService;
             this._newsLetterSubscriptionService = newsLetterSubscriptionService;
             this._workflowMessageService = workflowMessageService;
@@ -97,7 +93,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 
         protected string GetBackgroundUrl(int backgroundId)
         {
-            var cacheKey = _cacheKeyService.PrepareKey(ModelCacheEventConsumer.BACKGROUND_URL_MODEL_KEY, backgroundId);
+            var cacheKey = _staticCacheManager.PrepareKey(ModelCacheEventConsumer.BACKGROUND_URL_MODEL_KEY, backgroundId);
             return _staticCacheManager.Get(cacheKey, () =>
             {
                 //little hack here. nulls aren't cacheable so set it to ""
