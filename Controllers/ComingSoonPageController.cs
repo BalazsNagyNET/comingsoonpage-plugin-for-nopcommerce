@@ -21,6 +21,7 @@ using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
 using Nop.Core.Domain.Security;
 using Nop.Core.Events;
+using System.Threading.Tasks;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -91,24 +92,24 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             this._customerActivityService = customerActivityService;
         }
 
-        protected string GetBackgroundUrl(int backgroundId)
+        protected async Task<string> GetBackgroundUrlAsync(int backgroundId)
         {
             var cacheKey = _staticCacheManager.PrepareKey(ModelCacheEventConsumer.BACKGROUND_URL_MODEL_KEY, backgroundId);
-            return _staticCacheManager.Get(cacheKey, () =>
+            return await _staticCacheManager.GetAsync(cacheKey, async () =>
             {
                 //little hack here. nulls aren't cacheable so set it to ""
-                var url = _pictureService.GetPictureUrl(backgroundId, showDefaultPicture: false) ?? "";
+                var url = await _pictureService.GetPictureUrlAsync(backgroundId, showDefaultPicture: false) ?? "";
                 return url;
             });
         }
 
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             //load settings for a chosen store scope
-            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
-            var comingSoonPageSettings = _settingService.LoadSetting<ComingSoonPageSettings>(storeScope);
+            var storeScope = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+            var comingSoonPageSettings = await _settingService.LoadSettingAsync<ComingSoonPageSettings>(storeScope);
             var model = new ConfigurationModel();
             model.BackgroundId = comingSoonPageSettings.BackgroundId;
             model.OpeningDate = comingSoonPageSettings.OpeningDate;
@@ -118,11 +119,11 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             model.ActiveStoreScopeConfiguration = storeScope;
             if (storeScope > 0)
             {
-                model.BackgroundId_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.BackgroundId, storeScope);
-                model.OpeningDate_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.OpeningDate, storeScope);
-                model.DisplayCountdown_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.DisplayCountdown, storeScope);
-                model.DisplayNewsletterBox_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.DisplayNewsletterBox, storeScope);
-                model.DisplayLoginButton_OverrideForStore = _settingService.SettingExists(comingSoonPageSettings, x => x.DisplayLoginButton, storeScope);
+                model.BackgroundId_OverrideForStore = await _settingService.SettingExistsAsync(comingSoonPageSettings, x => x.BackgroundId, storeScope);
+                model.OpeningDate_OverrideForStore = await _settingService.SettingExistsAsync(comingSoonPageSettings, x => x.OpeningDate, storeScope);
+                model.DisplayCountdown_OverrideForStore = await _settingService.SettingExistsAsync(comingSoonPageSettings, x => x.DisplayCountdown, storeScope);
+                model.DisplayNewsletterBox_OverrideForStore = await _settingService.SettingExistsAsync(comingSoonPageSettings, x => x.DisplayNewsletterBox, storeScope);
+                model.DisplayLoginButton_OverrideForStore = await _settingService.SettingExistsAsync(comingSoonPageSettings, x => x.DisplayLoginButton, storeScope);
             }
 
             return View("~/Plugins/Misc.ComingSoonPage/Views/Configure.cshtml", model);
@@ -131,11 +132,11 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         [HttpPost]
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             //load settings for a chosen store scope
-            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
-            var comingSoonPageSettings = _settingService.LoadSetting<ComingSoonPageSettings>(storeScope);
+            var storeScope = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+            var comingSoonPageSettings = await _settingService.LoadSettingAsync<ComingSoonPageSettings>(storeScope);
             comingSoonPageSettings.BackgroundId = model.BackgroundId;
             comingSoonPageSettings.OpeningDate = model.OpeningDate;
             comingSoonPageSettings.DisplayCountdown = model.DisplayCountdown;
@@ -145,28 +146,29 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
             /* We do not clear cache after each setting update.
              * This behavior can increase performance because cached settings will not be cleared
              * and loaded from database after each update */
-            _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.BackgroundId, model.BackgroundId_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.OpeningDate, model.OpeningDate_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.DisplayCountdown, model.DisplayCountdown_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.DisplayNewsletterBox, model.DisplayNewsletterBox_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(comingSoonPageSettings, x => x.DisplayLoginButton, model.DisplayLoginButton_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(comingSoonPageSettings, x => x.BackgroundId, model.BackgroundId_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(comingSoonPageSettings, x => x.OpeningDate, model.OpeningDate_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(comingSoonPageSettings, x => x.DisplayCountdown, model.DisplayCountdown_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(comingSoonPageSettings, x => x.DisplayNewsletterBox, model.DisplayNewsletterBox_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(comingSoonPageSettings, x => x.DisplayLoginButton, model.DisplayLoginButton_OverrideForStore, storeScope, false);
 
             //now clear settings cache
-            _settingService.ClearCache();
+            await _settingService.ClearCacheAsync();
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
-            return Configure();
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Plugins.Saved"));
+
+            return await Configure();
         }
 
-        public IActionResult Display()
+        public async Task<IActionResult> Display()
         {
             if (TempData.ContainsKey("ModelState"))
                 ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
 
-            var comingSoonPageSettings = _settingService.LoadSetting<ComingSoonPageSettings>(_storeContext.CurrentStore.Id);
+            var comingSoonPageSettings = await _settingService.LoadSettingAsync<ComingSoonPageSettings>((await _storeContext.GetCurrentStoreAsync()).Id);
 
             var model = new PublicInfoModel();
-            model.BackgroundUrl = GetBackgroundUrl(comingSoonPageSettings.BackgroundId);
+            model.BackgroundUrl = await GetBackgroundUrlAsync(comingSoonPageSettings.BackgroundId);
             model.OpeningDate = comingSoonPageSettings.OpeningDate.ToString("yyyy/MM/dd hh:mm:ss");
             model.DisplayCountdown = comingSoonPageSettings.DisplayCountdown;
             model.DisplayNewsletterBox = comingSoonPageSettings.DisplayNewsletterBox;
@@ -183,13 +185,13 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public IActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl, bool captchaValid)
         {
-            TempData["errors"] = _localizationService.GetResource("Account.Login.Unsuccessful");
+            TempData["errors"] = await _localizationService.GetResourceAsync("Account.Login.Unsuccessful");
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
             {
-                AddErrorMessage(_localizationService.GetResource("Common.WrongCaptchaMessage"));
+                AddErrorMessage(await _localizationService.GetResourceAsync("Common.WrongCaptchaMessage"));
                 return RedirectToAction("Display");
             }
 
@@ -199,24 +201,24 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
                 {
                     model.Username = model.Username.Trim();
                 }
-                var loginResult = _customerRegistrationService.ValidateCustomer(_customerSettings.UsernamesEnabled ? model.Username : model.Email, model.Password);
+                var loginResult = await _customerRegistrationService.ValidateCustomerAsync(_customerSettings.UsernamesEnabled ? model.Username : model.Email, model.Password);
                 switch (loginResult)
                 {
                     case CustomerLoginResults.Successful:
                         {
-                            var customer = _customerSettings.UsernamesEnabled ? _customerService.GetCustomerByUsername(model.Username) : _customerService.GetCustomerByEmail(model.Email);
+                            var customer = _customerSettings.UsernamesEnabled ? await _customerService.GetCustomerByUsernameAsync(model.Username) : await _customerService.GetCustomerByEmailAsync(model.Email);
 
                             //migrate shopping cart
-                            _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, customer, true);
+                            await _shoppingCartService.MigrateShoppingCartAsync(await  _workContext.GetCurrentCustomerAsync(), customer, true);
 
                             //sign in new customer
-                            _authenticationService.SignIn(customer, model.RememberMe);
+                            await _authenticationService.SignInAsync(customer, model.RememberMe);
 
                             //raise event
-                            _eventPublisher.Publish(new CustomerLoggedinEvent(customer));
+                            await _eventPublisher.PublishAsync(new CustomerLoggedinEvent(customer));
 
                             //activity log
-                            _customerActivityService.InsertActivity("PublicStore.Login", _localizationService.GetResource("ActivityLog.PublicStore.Login"), customer);
+                            await _customerActivityService.InsertActivityAsync("PublicStore.Login", await _localizationService.GetResourceAsync("ActivityLog.PublicStore.Login"), customer);
 
                             if (String.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
                                 return RedirectToRoute("HomePage");
@@ -224,20 +226,20 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
                             return Redirect(returnUrl);
                         }
                     case CustomerLoginResults.CustomerNotExist:
-                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials.CustomerNotExist"));
+                        AddErrorMessage(await _localizationService.GetResourceAsync("Account.Login.WrongCredentials.CustomerNotExist"));
                         break;
                     case CustomerLoginResults.Deleted:
-                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials.Deleted"));
+                        AddErrorMessage(await _localizationService.GetResourceAsync("Account.Login.WrongCredentials.Deleted"));
                         break;
                     case CustomerLoginResults.NotActive:
-                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials.NotActive"));
+                        AddErrorMessage(await _localizationService.GetResourceAsync("Account.Login.WrongCredentials.NotActive"));
                         break;
                     case CustomerLoginResults.NotRegistered:
-                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials.NotRegistered"));
+                        AddErrorMessage(await _localizationService.GetResourceAsync("Account.Login.WrongCredentials.NotRegistered"));
                         break;
                     case CustomerLoginResults.WrongPassword:
                     default:
-                        AddErrorMessage(_localizationService.GetResource("Account.Login.WrongCredentials"));
+                        AddErrorMessage(await _localizationService.GetResourceAsync("Account.Login.WrongCredentials"));
                         break;
                 }
             }
