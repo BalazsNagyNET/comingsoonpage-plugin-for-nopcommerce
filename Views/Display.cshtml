@@ -16,7 +16,7 @@
 }
 @{
     var service = Nop.Core.Infrastructure.EngineContext.Current.Resolve<ISettingService>();
-    var storeInformationSettings = service.LoadSetting<StoreInformationSettings>();
+    var storeInformationSettings = await service.LoadSettingAsync<StoreInformationSettings>();
 }
 <style>
     body, .csp-login-form {
