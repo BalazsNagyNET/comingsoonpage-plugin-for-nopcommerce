@@ -26,7 +26,7 @@ jobs:
         ref: '${{ matrix.args.tag }}'
 
     - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
+      uses: nuget/setup-nuget@v1
 
     - name: Restore packages
       run: nuget restore src\NopCommerce.sln
