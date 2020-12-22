@@ -36,7 +36,7 @@ jobs:
       run: nuget restore src\Plugins\Nop.Plugin.Misc.ComingSoonPage\Nop.Plugin.Misc.ComingSoonPage.csproj
 
     - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.1
+      uses: microsoft/setup-msbuild@v1.0.2
       if: matrix.args.version <= '4.00'
 
     - name: Build plugin with MSBuild
