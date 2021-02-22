@@ -5,9 +5,7 @@
 }
 
 @await Component.InvokeAsync("StoreScopeConfiguration")
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<form asp-controller="ComingSoonPage" asp-action="Configure" method="post">
     <div class="panel-group">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -72,4 +70,4 @@
             </div>
         </div>
     </div>
-}
+</form>
