@@ -5,13 +5,12 @@
 }
 
 @await Component.InvokeAsync("StoreScopeConfiguration")
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <div class="panel-group">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="form-group">
+
+<form asp-controller="ComingSoonPage" asp-action="Configure" method="post">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-body">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="BackgroundId_OverrideForStore" asp-input="BackgroundId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="BackgroundId" />
@@ -21,7 +20,7 @@
                         <span asp-validation-for="BackgroundId"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="OpeningDate_OverrideForStore" asp-input="OpeningDate" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="OpeningDate" />
@@ -31,7 +30,7 @@
                         <span asp-validation-for="OpeningDate"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="DisplayCountdown_OverrideForStore" asp-input="DisplayCountdown" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="DisplayCountdown" />
@@ -41,7 +40,7 @@
                         <span asp-validation-for="DisplayCountdown"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="DisplayNewsletterBox_OverrideForStore" asp-input="DisplayNewsletterBox" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="DisplayNewsletterBox" />
@@ -51,7 +50,7 @@
                         <span asp-validation-for="DisplayNewsletterBox"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="DisplayLoginButton_OverrideForStore" asp-input="DisplayLoginButton" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="DisplayLoginButton" />
@@ -61,7 +60,7 @@
                         <span asp-validation-for="DisplayLoginButton"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         &nbsp;
                     </div>
@@ -72,4 +71,4 @@
             </div>
         </div>
     </div>
-}
+</form>
