@@ -23,6 +23,7 @@ using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework;
 using System.Collections.Generic;
 using Nop.Core.Domain.Security;
+using System.Globalization;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 {
@@ -169,7 +170,7 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Controllers
 
             var model = new PublicInfoModel();
             model.BackgroundUrl = GetBackgroundUrl(comingSoonPageSettings.BackgroundId);
-            model.OpeningDate = comingSoonPageSettings.OpeningDate.ToString("yyyy/MM/dd hh:mm:ss");
+            model.OpeningDate = Convert.ToDateTime(comingSoonPageSettings.OpeningDate).ToString("G", new CultureInfo("en-US"));
             model.DisplayCountdown = comingSoonPageSettings.DisplayCountdown;
             model.DisplayNewsletterBox = comingSoonPageSettings.DisplayNewsletterBox;
             model.DisplayLoginButton = comingSoonPageSettings.DisplayLoginButton;
