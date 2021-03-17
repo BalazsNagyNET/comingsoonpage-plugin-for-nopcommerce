@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
  <PropertyGroup>
-   <TargetFramework>netcoreapp3.1</TargetFramework>
+   <TargetFramework>netcoreapp5</TargetFramework>
  </PropertyGroup>
  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
    <OutputPath>..\..\Presentation\Nop.Web\Plugins\Misc.ComingSoonPage</OutputPath>

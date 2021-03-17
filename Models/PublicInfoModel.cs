@@ -5,7 +5,7 @@ using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Plugin.Misc.ComingSoonPage.Models
 {
-    public class PublicInfoModel : BaseNopModel
+    public record PublicInfoModel : BaseNopModel
     {
         //ComingSoonPageProperties
         public string BackgroundUrl { get; set; }
@@ -27,7 +27,6 @@ namespace Nop.Plugin.Misc.ComingSoonPage.Models
         public string Username { get; set; }
 
         [DataType(DataType.Password)]
-        [NoTrim]
         [NopResourceDisplayName("Account.Login.Fields.Password")]
         public string Password { get; set; }
 
